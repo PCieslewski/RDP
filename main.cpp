@@ -13,8 +13,8 @@ int main (int argc, char* argv[]){
 	Lexer lex;
 	
 	lex.open(path.c_str());
-		
-	while(lex.hasNext){
+	
+	while(lex.hasNextToken){
 		cout << lex.getNextToken()->toString() << endl;
 	}
 	

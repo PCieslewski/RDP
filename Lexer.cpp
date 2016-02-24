@@ -2,22 +2,24 @@
 
 Lexer :: Lexer(){
 	hasNext = false;
+	hasNextToken = false;
 }
 
 void Lexer :: open(string path){
 	ifs.open(path.c_str());
 	hasNext = !(ifs.peek() == EOF);
+	hasNextToken = true;
 }
 
 void Lexer :: close(){
 	hasNext = false;
+	hasNextToken = false;
 	ifs.close();	
 }
 
 char Lexer :: getNextChar(){
 	char temp;
 	ifs.get(temp);
-	//cout << temp << endl;
 	hasNext = !(ifs.peek() == EOF);
 	return temp;
 }
@@ -29,14 +31,8 @@ void Lexer :: test(){
 //Main function that returns the next token of the input file.
 Token* Lexer :: getNextToken(){
 	char a, b;
-	bool t = true;
+	//bool t = true;
 	while(hasNext){
-		
-		//ifs.get(a);
-		//Get a character from the file.
-		//if(ifs.eof()){
-		//	return new Token("EOF", "");
-		//}
 		
 		//Check if there is a // which indicates a comment.
 		if(upcomingComment()){
@@ -53,6 +49,11 @@ Token* Lexer :: getNextToken(){
 			return getInteger();
 		}
 		
+		//Check if the next character is a punction.
+		else if(upcomingPunction()){
+			return getPunction();
+		}
+		
 		//Check if the character is an operator
 		else if(upcomingOperator()){
 			return getOperator();
@@ -65,24 +66,21 @@ Token* Lexer :: getNextToken(){
 		
 		//Throw out the character
 		else{
-			t = ifs.get(a);
+			getNextChar();
 		}
 		
 	}
 	
-	hasNext = false;
+	hasNextToken = false;
 	return new Token("EOF", "");
 	
 }
 
 Token* Lexer :: getIdentifier(){
-	string type = "Identifier";
 	string value = "";
-	Token* token = new Token();
-	char a;
 	
 	while(hasNext){
-		a = getNextChar();
+		char a = getNextChar();
 		if(isalpha(a)){
 			value = value + a;
 		}
@@ -92,9 +90,7 @@ Token* Lexer :: getIdentifier(){
 		}
 	}
 	
-	token->type = type;
-	token->value = value;
-	return token;
+	return new Token("Identifier", value);
 }
 
 void Lexer :: readComment(){
@@ -161,6 +157,28 @@ Token* Lexer :: getString(){
 	exit(EXIT_FAILURE);
 }
 
+Token* Lexer :: getPunction(){
+	char a = getNextChar();
+	switch(a){
+		case '(':
+			return new Token("Punction", "(");
+			break;
+		case ')':
+			return new Token("Punction", ")");
+			break;
+		case ';':
+			return new Token("Punction", ";");
+			break;
+		case ',':
+			return new Token("Punction", ",");
+			break;
+		default:
+			cout << "Error occured in getPunction." << endl;
+			exit(EXIT_FAILURE);
+			break;
+	}
+}
+
 bool Lexer :: isOp(char a){
 	
 	char operators[26] = {'+', '-', '*', '<', '>', '&', '.',
@@ -179,8 +197,7 @@ bool Lexer :: isOp(char a){
 
 bool Lexer :: upcomingIdentifier(){
 	if(hasNext){
-		char a = getNextChar();
-		putBackChar(a);
+		char a = ifs.peek();
 		if(isalpha(a)) return true;
 	}
 	return false;
@@ -188,8 +205,7 @@ bool Lexer :: upcomingIdentifier(){
 
 bool Lexer :: upcomingInteger(){
 	if(hasNext){
-		char a = getNextChar();
-		putBackChar(a);
+		char a = ifs.peek();
 		if(isdigit(a)) return true;
 	}
 	return false;
@@ -197,8 +213,7 @@ bool Lexer :: upcomingInteger(){
 
 bool Lexer :: upcomingOperator(){
 	if(hasNext){
-		char a = getNextChar();
-		putBackChar(a);
+		char a = ifs.peek();
 		if(isOp(a)) return true;
 	}
 	return false;
@@ -209,12 +224,15 @@ bool Lexer :: upcomingComment(){
 	if(hasNext){
 		a = getNextChar();
 		if((a == '/') && hasNext){	
-			b = getNextChar();
-			putBackChar(b);
+			b = ifs.peek();
 			putBackChar(a);
-			if(b == '/') return true;
+			if(b == '/') {
+				return true;
+			}
 		}
-		putBackChar(a);
+		else{
+			putBackChar(a);
+		}
 	}
 	return false;
 }
@@ -227,10 +245,44 @@ bool Lexer :: upcomingString(){
 	return false;
 }
 
+bool Lexer :: upcomingPunction(){
+	char a = ifs.peek();
+	char punctions[4] = {'(', ')', ';', ','};
+	for(int i=0; i<4; i++){
+		if(punctions[i] == a){
+			return true;
+		}
+	}
+	return false;
+}
+
 void Lexer :: putBackChar(char a){
 	ifs.putback(a);
 	hasNext = true;
 }
+
+void Lexer :: upcoming(string str){
+	int currentPosition = ifs.tellg();
+	
+	char raw[str.length()+1];
+	ifs.get(raw, str.length()+1);
+	
+	string temp(raw);
+	
+	cout << str << endl;
+	cout << temp << endl;
+	
+	if(temp.compare(str) == 0){
+		cout << "MATCH!" << endl;	
+	}
+	else {
+		cout << "Does not match." << endl;
+	}
+	
+	ifs.seekg(currentPosition, std::ios_base::beg);
+}
+
+
 
 
 

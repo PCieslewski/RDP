@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "Token.h"
+#include <ios>
 using namespace std;
 
 class Lexer {
@@ -17,15 +18,18 @@ class Lexer {
 	
 		void open(string path);
 		void close();
-		bool hasNext;
+		bool hasNextToken;
 	
 		void test();
 		Token* getNextToken();
+	
+		void upcoming(string str);
 	
 	private:
 	
 		ifstream ifs;
 		bool isOp(char a);
+		bool hasNext;
 	
 		char getNextChar();
 		void putBackChar(char a);
@@ -34,6 +38,7 @@ class Lexer {
 		Token* getIdentifier();
 		Token* getOperator();
 		Token* getString();
+		Token* getPunction();
 		void readComment();
 	
 		bool upcomingComment();
@@ -41,6 +46,7 @@ class Lexer {
 		bool upcomingOperator();
 		bool upcomingInteger();
 		bool upcomingString();
+		bool upcomingPunction();
 		
 };
 
