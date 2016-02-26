@@ -72,11 +72,12 @@ Token* Lexer :: getNextToken(){
 	}
 	
 	hasNextToken = false;
-	return new Token("EOF", "");
+	return new Token("EOF", "EOF");
 	
 }
 
 Token* Lexer :: getIdentifier(){
+	string type = "Identifier";
 	string value = "";
 	
 	while(hasNext){
@@ -90,7 +91,20 @@ Token* Lexer :: getIdentifier(){
 		}
 	}
 	
-	return new Token("Identifier", value);
+	if(
+	(!(value.compare("let"))) |
+	(!(value.compare("in"))) |
+	(!(value.compare("within"))) |
+	(!(value.compare("or"))) |
+	(!(value.compare("and"))) |
+	(!(value.compare("fn"))) |
+	(!(value.compare("aug"))) |
+	(!(value.compare("rec")))
+	){
+		type = "Keyword";
+	}
+	
+	return new Token(type, value);
 }
 
 void Lexer :: readComment(){
@@ -148,6 +162,17 @@ Token* Lexer :: getString(){
 	while(hasNext){
 		char a = getNextChar();
 		value = value + a;
+		
+		if(a == '\\'){
+			char b = getNextChar();
+			if(b == '\''){
+				value = value + b;	
+			}
+			else{
+				putBackChar(b);	
+			}
+		}
+		
 		if(a == '\''){
 			return new Token(type, value);
 		}
@@ -234,7 +259,7 @@ bool Lexer :: upcomingComment(){
 			putBackChar(a);
 		}
 	}
-	return false;
+	return false;		
 }
 
 bool Lexer :: upcomingString(){
@@ -261,25 +286,25 @@ void Lexer :: putBackChar(char a){
 	hasNext = true;
 }
 
-void Lexer :: upcoming(string str){
+//Broken.
+bool Lexer :: upcoming(string str){
+	
+	bool up = false;
 	int currentPosition = ifs.tellg();
 	
 	char raw[str.length()+1];
 	ifs.get(raw, str.length()+1);
-	
 	string temp(raw);
 	
-	cout << str << endl;
-	cout << temp << endl;
-	
 	if(temp.compare(str) == 0){
-		cout << "MATCH!" << endl;	
+		up = true;
 	}
 	else {
-		cout << "Does not match." << endl;
+		up = false;
 	}
-	
 	ifs.seekg(currentPosition, std::ios_base::beg);
+	
+	return up;
 }
 
 

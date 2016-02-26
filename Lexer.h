@@ -23,8 +23,6 @@ class Lexer {
 		void test();
 		Token* getNextToken();
 	
-		void upcoming(string str);
-	
 	private:
 	
 		ifstream ifs;
@@ -47,6 +45,9 @@ class Lexer {
 		bool upcomingInteger();
 		bool upcomingString();
 		bool upcomingPunction();
+	
+		//Broken
+		bool upcoming(string str);
 		
 };
 

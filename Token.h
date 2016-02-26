@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 class Token {
@@ -14,6 +15,9 @@ class Token {
 		Token();
 		Token(string type, string value);
 		string toString();
+	
+		bool valueIs(string value);
+		bool typeIs(string type);
 	
 };
 
