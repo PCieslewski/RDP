@@ -82,7 +82,7 @@ Token* Lexer :: getIdentifier(){
 	
 	while(hasNext){
 		char a = getNextChar();
-		if(isalpha(a)){
+		if(isalpha(a) | isdigit(a) | (a=='_')){
 			value = value + a;
 		}
 		else{
@@ -99,7 +99,8 @@ Token* Lexer :: getIdentifier(){
 	(!(value.compare("and"))) |
 	(!(value.compare("fn"))) |
 	(!(value.compare("aug"))) |
-	(!(value.compare("rec")))
+	(!(value.compare("rec"))) |
+	(!(value.compare("where")))
 	){
 		type = "Keyword";
 	}

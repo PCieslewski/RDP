@@ -392,6 +392,8 @@ void Parser :: Db(){
 				n++;
 			}
 			while(nextToken->valueIs("(") | nextToken->typeIs("Identifier"));
+			readToken("=");
+			E();
 			buildTree("fcn_form",n+2);
 		}
 	}
