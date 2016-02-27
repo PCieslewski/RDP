@@ -1,2 +1,2 @@
-let x=3 in Print(x)
+let nil=3 in Print(nil)
 //Print(2)

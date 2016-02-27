@@ -100,9 +100,13 @@ Token* Lexer :: getIdentifier(){
 	(!(value.compare("fn"))) |
 	(!(value.compare("aug"))) |
 	(!(value.compare("rec"))) |
+	(!(value.compare("nil"))) |
 	(!(value.compare("where")))
 	){
 		type = "Keyword";
+	}
+	else{
+		value = "<ID:" + value + ">";	
 	}
 	
 	return new Token(type, value);
@@ -132,6 +136,7 @@ Token* Lexer :: getInteger(){
 			break;
 		}
 	}
+	value = "<INT:" + value + ">";
 	return new Token(type, value);
 }
 
@@ -175,6 +180,7 @@ Token* Lexer :: getString(){
 		}
 		
 		if(a == '\''){
+			value = "<STR:" + value + ">";
 			return new Token(type, value);
 		}
 	}

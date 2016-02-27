@@ -4,11 +4,11 @@ TreeNode* Parser :: getAst(string path){
 	
 	lex.open(path);
 	nextToken = lex.getNextToken();
-	cout << nextToken->toString() << endl;
+	//cout << nextToken->toString() << endl;
 	E();
 	lex.close();
 	
-	cout << "Size of treeStack: " << treeStack.size() << endl;
+	//cout << "Size of treeStack: " << treeStack.size() << endl;
 	
 	TreeNode* ast = treeStack.top();
 	treeStack.pop();
@@ -21,7 +21,7 @@ void Parser :: readToken(string value){
 		delete nextToken;
 		if(lex.hasNextToken){
 			nextToken = lex.getNextToken();
-			cout << nextToken->toString() << endl;
+			//cout << nextToken->toString() << endl;
 		}
 		else{
 			cout << "Parser ran out of tokens." << endl;
@@ -40,7 +40,7 @@ void Parser :: readTokenByType(string type){
 		delete nextToken;
 		if(lex.hasNextToken){
 			nextToken = lex.getNextToken();
-			cout << nextToken->toString() << endl;
+			//cout << nextToken->toString() << endl;
 		}
 		else{
 			cout << "No more tokens for parser." << endl;
@@ -318,7 +318,8 @@ void Parser :: Rn(){
 		readToken("false");
 	}
 	else if(nextToken->valueIs("nil")){
-		buildTree(nextToken->value,0);
+		//For some unknown reason, rpal puts a <> around nil...
+		buildTree("<" + nextToken->value + ">",0);
 		readToken("nil");
 	}
 	else if(nextToken->valueIs("(")){
@@ -394,7 +395,7 @@ void Parser :: Db(){
 			while(nextToken->valueIs("(") | nextToken->typeIs("Identifier"));
 			readToken("=");
 			E();
-			buildTree("fcn_form",n+2);
+			buildTree("function_form",n+2);
 		}
 	}
 	else{

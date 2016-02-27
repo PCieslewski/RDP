@@ -15,10 +15,14 @@ void TreeNode :: addChild(TreeNode* newChild){
 
 string TreeNode :: toString(){
 	string temp = "";
-	temp = temp + value + "\n";
+	temp = temp + value;
 	
 	for(int i = 0; i < children.size(); i++){
 		temp = temp + children.at(i)->toString(1);
+	}
+	
+	if(children.size() == 0){
+		temp = temp + "\n";
 	}
 	
 	return temp;
@@ -31,7 +35,7 @@ string TreeNode :: toString(int level){
 	for(int i=0; i<level; i++){
 		temp = temp + '.';	
 	}
-	temp = temp + value + "\n";
+	temp = "\n" + temp + value;
 
 	for(int i = 0; i < children.size(); i++){
 		temp = temp + children.at(i)->toString(level + 1);
