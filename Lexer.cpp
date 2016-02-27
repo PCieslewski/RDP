@@ -101,6 +101,16 @@ Token* Lexer :: getIdentifier(){
 	(!(value.compare("aug"))) |
 	(!(value.compare("rec"))) |
 	(!(value.compare("nil"))) |
+	(!(value.compare("eq"))) |
+	(!(value.compare("not"))) |
+	(!(value.compare("gr"))) |
+	(!(value.compare("ge"))) |
+	(!(value.compare("ne"))) |
+	(!(value.compare("ls"))) |
+	(!(value.compare("le"))) |
+	(!(value.compare("dummy"))) |
+	(!(value.compare("true"))) |
+	(!(value.compare("false"))) |
 	(!(value.compare("where")))
 	){
 		type = "Keyword";

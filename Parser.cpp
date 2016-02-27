@@ -221,6 +221,7 @@ void Parser :: A(){
 	}
 	else if(nextToken->valueIs("-")){
 		readToken("-");
+		At();
 		buildTree("neg",1);
 	}
 	else{
@@ -310,11 +311,11 @@ void Parser :: Rn(){
 		readTokenByType("String");
 	}
 	else if(nextToken->valueIs("true")){
-		buildTree(nextToken->value,0);
+		buildTree("<" + nextToken->value + ">",0);
 		readToken("true");
 	}
 	else if(nextToken->valueIs("false")){
-		buildTree(nextToken->value,0);
+		buildTree("<" + nextToken->value + ">",0);
 		readToken("false");
 	}
 	else if(nextToken->valueIs("nil")){
@@ -328,7 +329,7 @@ void Parser :: Rn(){
 		readToken(")");
 	}
 	else if(nextToken->valueIs("dummy")){
-		buildTree(nextToken->value,0);
+		buildTree("<" + nextToken->value + ">",0);
 		readToken("dummy");
 	}
 }
@@ -373,12 +374,15 @@ void Parser :: Db(){
 		
 		if(nextToken->valueIs(",")){
 			//This is the Vl() case;
+			int n = 0;
 			while(nextToken->valueIs(",")){
 				readToken(",");
 				buildTree(nextToken->value,0);
 				readTokenByType("Identifier");
-				buildTree(",",2);
+				n++;
+				//buildTree(",",2);
 			}
+			buildTree(",",n+1);
 		}
 		
 		if(nextToken->valueIs("=")){
@@ -426,10 +430,16 @@ void Parser :: Vb(){
 void Parser :: Vl(){
 	buildTree(nextToken->value,0);
 	readTokenByType("Identifier");
-	while(nextToken->valueIs(",")){
-		readToken(",");
-		buildTree(nextToken->value,0);
-		readTokenByType("Identifier");
-		buildTree(",",2);
+	
+	if(nextToken->valueIs(",")){
+		int n = 0;
+		while(nextToken->valueIs(",")){
+			readToken(",");
+			buildTree(nextToken->value,0);
+			readTokenByType("Identifier");
+			n++;
+			//buildTree(",",2);
+		}
+		buildTree(",",n+1);
 	}
 }
