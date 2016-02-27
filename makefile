@@ -18,3 +18,11 @@ Parser.o: Parser.cpp
 
 clean:
 	rm -f *.o p1
+	rm -f -r diffresult
+	
+cl:
+	rm -f *.o p1
+	rm -f -r diffresult
+	
+test: p1
+	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast FILE" -t tests/
