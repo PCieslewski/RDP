@@ -1,0 +1,9 @@
+All test cases work without any problems.
+
+I could not find any bugs with my software!
+
+For your convinience (and mine), "make test" calls the perl script on all of the test files provided.
+
+Thank you for your time!
+
+-Pawel
