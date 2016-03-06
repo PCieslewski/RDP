@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+//This function returns the a pointer to a tree node that is the
+//root of the AST.
 TreeNode* Parser :: getAst(string path){
 	
 	lex.open(path);
@@ -16,6 +18,7 @@ TreeNode* Parser :: getAst(string path){
 	
 }
 
+//Confirms that a token is of the given value and deletes it.
 void Parser :: readToken(string value){
 	if(nextToken->valueIs(value)){
 		delete nextToken;
@@ -34,6 +37,8 @@ void Parser :: readToken(string value){
 	}
 }
 
+//Confirms that a token is of a certain type and deletes it.
+//For example, string or identifier.
 void Parser :: readTokenByType(string type){
 	
 	if(nextToken->typeIs(type)){
@@ -53,7 +58,8 @@ void Parser :: readTokenByType(string type){
 	}
 }
 	   
-	   
+//Pops num children off of the tree stack, creates a new treenode with
+//the value, value.
 void Parser :: buildTree(string value, int numChildren) {
 	TreeNode* tn = new TreeNode(value);
 	for(int i = 0; i<numChildren; i++){
@@ -62,6 +68,11 @@ void Parser :: buildTree(string value, int numChildren) {
 	}
 	treeStack.push(tn);
 }
+
+/*
+All of the following function are functions to used to process the non terminal
+expressions of the grammar.
+*/
 
 void Parser :: E(){
 	if(nextToken->valueIs("let")){

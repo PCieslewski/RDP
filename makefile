@@ -24,5 +24,7 @@ cl:
 	rm -f *.o p1
 	rm -f -r diffresult
 	
-test: p1
+test: p1 rpal
+	chmod +x p1
+	chmod +x rpal
 	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast FILE" -t tests/

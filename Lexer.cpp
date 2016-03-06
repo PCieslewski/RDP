@@ -1,22 +1,26 @@
 #include "Lexer.h"
 
+//Constructor for the lexer object.
 Lexer :: Lexer(){
 	hasNext = false;
 	hasNextToken = false;
 }
 
+//Opens a file for the lexer.
 void Lexer :: open(string path){
 	ifs.open(path.c_str());
 	hasNext = !(ifs.peek() == EOF);
 	hasNextToken = true;
 }
 
+//Closes a file for the lexer.
 void Lexer :: close(){
 	hasNext = false;
 	hasNextToken = false;
 	ifs.close();	
 }
 
+//Gets the next character in the file.
 char Lexer :: getNextChar(){
 	char temp;
 	ifs.get(temp);
@@ -76,6 +80,9 @@ Token* Lexer :: getNextToken(){
 	
 }
 
+//Function that reads and returns an identifier.
+//Note: Also if the identifier is a KEYWORD, such as in the list below
+//it will return a keyword token instead.
 Token* Lexer :: getIdentifier(){
 	string type = "Identifier";
 	string value = "";
@@ -122,6 +129,7 @@ Token* Lexer :: getIdentifier(){
 	return new Token(type, value);
 }
 
+//Function that reads and deletes a comment.
 void Lexer :: readComment(){
 	char a;
 	while(hasNext){
@@ -132,6 +140,7 @@ void Lexer :: readComment(){
 	}
 }
 
+//Function that reads and returns an integer.
 Token* Lexer :: getInteger(){
 	string type = "Integer";
 	string value = "";
@@ -150,6 +159,7 @@ Token* Lexer :: getInteger(){
 	return new Token(type, value);
 }
 
+//Function that reads and returns an operator.
 Token* Lexer :: getOperator(){
 	string type = "Operator";
 	string value = "";
@@ -170,6 +180,7 @@ Token* Lexer :: getOperator(){
 	return new Token(type, value);
 }
 
+//Function that reads and returns a string.
 Token* Lexer :: getString(){
 	string type = "String";
 	string value = "";
@@ -199,6 +210,7 @@ Token* Lexer :: getString(){
 	exit(EXIT_FAILURE);
 }
 
+//Function that reads and returns a punction.
 Token* Lexer :: getPunction(){
 	char a = getNextChar();
 	switch(a){
@@ -221,6 +233,7 @@ Token* Lexer :: getPunction(){
 	}
 }
 
+//Function that checks to see if a character is an operator.
 bool Lexer :: isOp(char a){
 	
 	char operators[26] = {'+', '-', '*', '<', '>', '&', '.',
@@ -237,6 +250,7 @@ bool Lexer :: isOp(char a){
 	
 }
 
+//Function that checks to see if an identifier is next in the file.
 bool Lexer :: upcomingIdentifier(){
 	if(hasNext){
 		char a = ifs.peek();
@@ -245,6 +259,7 @@ bool Lexer :: upcomingIdentifier(){
 	return false;
 }
 
+//Function that checks to see if an identifier is next in the file.
 bool Lexer :: upcomingInteger(){
 	if(hasNext){
 		char a = ifs.peek();
@@ -253,6 +268,7 @@ bool Lexer :: upcomingInteger(){
 	return false;
 }
 
+//Function that checks to see if an operator is next in the file.
 bool Lexer :: upcomingOperator(){
 	if(hasNext){
 		char a = ifs.peek();
@@ -261,6 +277,7 @@ bool Lexer :: upcomingOperator(){
 	return false;
 }
 
+////Function that checks to see if a comment is next in the file.
 bool Lexer :: upcomingComment(){
 	char a, b;
 	if(hasNext){
@@ -279,6 +296,7 @@ bool Lexer :: upcomingComment(){
 	return false;		
 }
 
+//Function that checks to see if a string is next in the file.
 bool Lexer :: upcomingString(){
 	char a = ifs.peek();
 	if(a == '\''){
@@ -287,6 +305,7 @@ bool Lexer :: upcomingString(){
 	return false;
 }
 
+//Function that checks to see if a punction is next in the file.
 bool Lexer :: upcomingPunction(){
 	char a = ifs.peek();
 	char punctions[4] = {'(', ')', ';', ','};
@@ -298,32 +317,11 @@ bool Lexer :: upcomingPunction(){
 	return false;
 }
 
+//Function that returns a character to the input stream to be retrieved later.
 void Lexer :: putBackChar(char a){
 	ifs.putback(a);
 	hasNext = true;
 }
-
-//Broken.
-bool Lexer :: upcoming(string str){
-	
-	bool up = false;
-	int currentPosition = ifs.tellg();
-	
-	char raw[str.length()+1];
-	ifs.get(raw, str.length()+1);
-	string temp(raw);
-	
-	if(temp.compare(str) == 0){
-		up = true;
-	}
-	else {
-		up = false;
-	}
-	ifs.seekg(currentPosition, std::ios_base::beg);
-	
-	return up;
-}
-
 
 
 

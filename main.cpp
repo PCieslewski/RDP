@@ -11,6 +11,14 @@ using namespace std;
 #include <string>
 #include <algorithm>
 
+/*
+This is the main function for the entire project. Simply,
+it gets the command line arguments, such as -ast. Then it
+creates a parser object on the path passed in and calls 
+getAst on it to generate the AST. Then it prints the AST
+if the -ast flag was set.
+*/
+
 int main (int argc, char* argv[]){
 	
 	string path = string(argv[argc-1]);
