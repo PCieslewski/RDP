@@ -23,6 +23,7 @@ int main (int argc, char* argv[]){
 	
 	string path = string(argv[argc-1]);
 	bool print = false;
+	bool printfile = false;
 	
 	if(!ifstream(path.c_str())){
 		cout << "File does not exist!" << endl;
@@ -34,6 +35,20 @@ int main (int argc, char* argv[]){
 		if(!arg.compare("-ast")){
 			print = true;	
 		}
+		else if(!arg.compare("-l")){
+			printfile = true;	
+		}
+	}
+	
+	if(printfile){
+		string line;
+		ifstream myfile (path.c_str());
+		if (myfile.is_open()){
+			while ( getline (myfile,line) ){
+				cout << line << '\n';
+			}
+		myfile.close();
+  		}
 	}
 	
 	Parser p;
