@@ -19,6 +19,8 @@ class TreeNode {
 		string toString();
 		string toString(int level);
 	
+		bool valueIs(string value);
+	
 };
 
 #endif

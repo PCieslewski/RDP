@@ -1,0 +1,6 @@
+let Power(F, n) = fn x. helper(F, n, x)
+	where rec helper(F, index, x) = 
+		index eq 1 -> F(x) |
+		F( helper(F, index-1, x) )
+in
+Print ( Power( (fn x. x+2), 2)(5) )

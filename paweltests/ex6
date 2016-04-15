@@ -1,0 +1,5 @@
+let sum(n) = 
+	n eq 0 -> 0 |
+	n eq 1 -> 1 |
+	5
+in Print(sum(3))

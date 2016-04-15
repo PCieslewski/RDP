@@ -1,0 +1,6 @@
+let rec F(x) = 
+	x eq 0 -> 0 |
+	x + F(x-1)
+in
+	Print(F(3))
+	

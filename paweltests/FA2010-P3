@@ -1,0 +1,15 @@
+let insert(A, ob, loc) = 
+
+	not Istuple(A) -> 'A is not a tuple.' |
+	not Isinteger(loc) -> 'Location is not an integer.' |
+	loc ls 0 -> 'Location of insert is negative.' |
+	loc gr Order A + 1 -> 'Location is out of bounds of tuple.' |
+
+	helper (A, nil, 1, ob, loc)
+	where rec helper (A, temp, Aindex, ob, loc) = 
+		Aindex eq (Order A + 2) -> temp |
+		Aindex eq loc -> helper(A, temp aug ob, Aindex + 1, ob, loc) |
+		Aindex ls loc -> helper(A, temp aug (A Aindex), Aindex + 1, ob, loc) |
+		Aindex gr loc -> helper(A, temp aug (A (Aindex-1)), Aindex + 1, ob, loc) |
+		Print( 'Error: You goofed.' )
+in Print( insert( (1,2,3), 'LOL', 2 ) )

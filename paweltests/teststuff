@@ -1,0 +1,2 @@
+let F = fn x. x+2
+in Print(F(2))

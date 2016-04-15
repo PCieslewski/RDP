@@ -1,0 +1,5 @@
+let revtup(A) = helper(A, Order A, nil)
+	where rec helper(A, index, B) =
+		index eq 0 -> B |
+		helper(A, index-1, B aug A index)
+in Print( revtup(1,2,3,4) )

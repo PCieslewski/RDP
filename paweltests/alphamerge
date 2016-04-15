@@ -1,0 +1,9 @@
+let alphamerge(A, B) = helper(A, B, '')
+	where rec helper(A, B, C) = 
+		(A eq '') & (B eq '') -> C |
+		(A eq '') -> helper(A, Stern B, C @Conc Stem B) |
+		(B eq '') -> helper(Stern A, B, C @Conc Stem A) |
+		Stem A ls Stem B -> helper(Stern A, B, C @Conc Stem A) |
+		helper(A, Stern B, C @Conc Stem B)
+in Print(alphamerge('fjh', 'cba'))
+

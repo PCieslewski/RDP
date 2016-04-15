@@ -1,0 +1,2 @@
+let T(x) = x + 1 in Print(T(2))
+

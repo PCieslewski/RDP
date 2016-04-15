@@ -1,0 +1,24 @@
+//let Sum(A) = Psum (A,Order A )
+//		where rec Psum (T,N) = N eq 0 -> 0
+//                                  | Psum(T,N-1)+T N
+//in Print ( Sum (1,2,3,4,5) )
+
+let allButLast(A) = 
+	helper(A, nil) where 
+	rec helper(A,B) =
+		Order A eq 1 -> nil |
+		(Order B) eq ((Order A) - 1) -> B | helper(A, B aug (A ((Order B) + 1)) )
+in Print( allButLast( 1,2,3,4 ) )
+//in
+//let Sum(A) = 
+		
+
+
+//let test(A) = A
+//in Print( test( 1,2,3 ) )
+
+//let rec Sum(A) = Order A eq 0 -> 0
+//                                  | Psum(T,N-1)+T N
+//in Print ( Sum (1,2,3,4,5) )
+
+

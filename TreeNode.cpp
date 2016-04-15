@@ -44,3 +44,7 @@ string TreeNode :: toString(int level){
 	return temp;
 	
 }
+
+bool TreeNode :: valueIs(string value){
+	return !(this->value.compare(value));
+}

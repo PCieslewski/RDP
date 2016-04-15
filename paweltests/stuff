@@ -1,0 +1,1 @@
+Print(a or b & c or d) where a,b,c,d = true, true, true, true

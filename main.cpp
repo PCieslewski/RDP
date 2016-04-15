@@ -6,6 +6,7 @@ using namespace std;
 #include "Token.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include "Standardizer.h"
 #include <vector>
 #include <utility>
 #include <string>
@@ -24,6 +25,7 @@ int main (int argc, char* argv[]){
 	string path = string(argv[argc-1]);
 	bool print = false;
 	bool printfile = false;
+	bool printSt = false;
 	
 	if(!ifstream(path.c_str())){
 		cout << "File does not exist!" << endl;
@@ -37,6 +39,9 @@ int main (int argc, char* argv[]){
 		}
 		else if(!arg.compare("-l")){
 			printfile = true;	
+		}
+		else if(!arg.compare("-st")){
+			printSt = true;	
 		}
 	}
 	
@@ -57,6 +62,10 @@ int main (int argc, char* argv[]){
 	
 	if(print){
 		cout << ast->toString() << endl;
+	}
+	
+	if(printSt){
+		cout << Standardizer :: standardize(ast)->toString() << endl;	
 	}
   
 }

@@ -1,0 +1,13 @@
+let merge s1 s2 = 
+	rm s1 s2 '' where
+	rec rm s1 s2 r = 
+		s1 eq '' & s2 eq '' -> r |
+		s1 eq '' -> r @Conc s2 |
+		s2 eq '' -> r @Conc s1 |
+		(
+			let c1 = Stem s1 and c2 = Stem s2 
+			in	c1 < c2 -> rm (Stern S1) s2 (r @Conc c1) |
+				rm s1 (Stern s2) (r @Conc c2)
+		)
+	in
+	Print (merge 'abd', 'bce')

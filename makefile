@@ -1,5 +1,5 @@
-p1: main.o Lexer.o Token.o TreeNode.o Parser.o
-	g++ main.o Lexer.o Token.o TreeNode.o Parser.o -o p1
+p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o
+	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o -o p1
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -15,6 +15,9 @@ TreeNode.o: TreeNode.cpp
 	
 Parser.o: Parser.cpp
 	g++ -c Parser.cpp
+	
+Standardizer.o: Standardizer.cpp
+	g++ -c Standardizer.cpp
 
 clean:
 	rm -f *.o p1

@@ -1,0 +1,16 @@
+//let Power(F, cnt) = 
+//	helper(F, cnt)
+//		where rec helper(F, cnt) = 
+//			cnt eq 1 -> F |
+//			F ( helper(F, cnt-1) )
+//in
+
+let Power(F, cnt) =
+	fn x. helper(F, cnt, x)
+		where rec helper(F, cnt, x) = 
+			cnt eq 1 -> F(x) |
+			F ( helper(F, cnt-1, x) )
+in
+let plusone(x) = x + 1
+in
+Print ( Power(plusone,2)(6) )
