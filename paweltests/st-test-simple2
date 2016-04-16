@@ -1,0 +1,7 @@
+//let F x y = x + y
+//in Print(F 2 3)
+
+let F x y = x + y within G x y = F (x+1) (y+1) 
+in Print(G 2 4)
+
+

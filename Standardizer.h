@@ -21,13 +21,13 @@ class Standardizer {
 	private:
 	
 		static TreeNode* standardizeLet(TreeNode* node);
-		//void standardizeWithin(TreeNode* node);
-		//void standardizeFcnForm(TreeNode* node);
-		//void standardizeLambda(TreeNode* node);
-		//void standardizeAnd(TreeNode* node);
-		//void standardizeWhere(TreeNode* node);
-		//void standardizeRec(TreeNode* node);
-		//void standardizeAtSign(TreeNode* node);
+		static TreeNode* standardizeWithin(TreeNode* node);
+		static TreeNode* standardizeFcnForm(TreeNode* node);
+		static TreeNode* standardizeLambda(TreeNode* node);
+		static TreeNode* standardizeAnd(TreeNode* node);
+		static TreeNode* standardizeWhere(TreeNode* node);
+		static TreeNode* standardizeRec(TreeNode* node);
+		static TreeNode* standardizeAtSign(TreeNode* node);
 		
 };
 
