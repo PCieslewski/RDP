@@ -20,11 +20,11 @@ Standardizer.o: Standardizer.cpp Standardizer.h
 	g++ -c Standardizer.cpp
 
 clean:
-	rm -f *.o p1
+	rm -f *.o p1 test
 	rm -f -r diffresult
 	
 cl:
-	rm -f *.o p1
+	rm -f *.o p1 test
 	rm -f -r diffresult
 	
 test: p1 rpal
@@ -36,3 +36,7 @@ testst: p1 rpal
 	chmod +x p1
 	chmod +x rpal
 	perl difftest.pl -1 "./rpal -st -noout FILE" -2 "./p1 -st -noout FILE" -t tests/
+	
+mainTest: 
+	g++ -c mainTest.cpp
+	g++ mainTest.o -o test
