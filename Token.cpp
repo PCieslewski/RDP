@@ -8,6 +8,13 @@ Token :: Token(){
 Token :: Token(string type, string value){
 	this->type = type;
 	this->value = value;
+	this->raw = value;
+}
+
+Token :: Token(string type, string value, string raw){
+	this->type = type;
+	this->value = value;
+	this->raw = raw;
 }
 
 string Token :: toString(){

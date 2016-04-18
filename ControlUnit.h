@@ -8,7 +8,7 @@ using namespace std;
 
 enum UnitType {IDENTIFIER, ENVIORNMENT, LAMBDA,
 			   GAMMA, BINOP, UNOP, BETA, TAU, Y,
-			   STRUCTURE};
+			   STRUCTURE, INTEGER, STRING};
 
 class CUHelper;
 class ControlStructure;
@@ -71,16 +71,24 @@ class LambdaCU: public ControlUnit {
 		int lambdaNum;
 		int currEnv;
 
-		LambdaCU(string bindingVar, int lambdaNum): ControlUnit(LAMBDA){
-			this->bindingVars.push_back(bindingVar);
+		LambdaCU(int lambdaNum): ControlUnit(LAMBDA){
 			this->lambdaNum = lambdaNum;
 			this->currEnv = -1;
+		}
+	
+		void addBindingVar(string bindingVar){
+			bindingVars.push_back(bindingVar);
 		}
 	
 		string toString(){
 			ostringstream temp;
 			temp << "Lambda.";
 			temp << lambdaNum;
+			
+			for(vector<string>::iterator it = bindingVars.begin(); it != bindingVars.end(); it++) {
+				temp << "." << *it;
+			}
+			
 			return temp.str();
 		}
 	
@@ -169,6 +177,39 @@ class YCU: public ControlUnit {
 	
 };
 
+class IntegerCU: public ControlUnit {
+	
+	public:
+		int num;
+	
+		IntegerCU(int num): ControlUnit(INTEGER){
+			this->num = num;
+		}
+	
+		string toString(){
+			ostringstream temp;
+			temp << "Int.";
+			temp << num;
+			return temp.str();
+		}
+	
+};
+
+class StringCU: public ControlUnit {
+	
+	public:
+		string value;
+	
+		StringCU(string value): ControlUnit(STRING){
+			this->value = value;
+		}
+	
+		string toString(){
+			return "Str." + value;
+		}
+	
+};
+
 class ControlStructure: public ControlUnit {
 
 	public:
@@ -223,6 +264,10 @@ class CUHelper {
 					return ((YCU*)cu)->toString();
 				case(STRUCTURE):
 					return ((ControlStructure*)cu)->toString();
+				case(INTEGER):
+					return ((IntegerCU*)cu)->toString();
+				case(STRING):
+					return ((StringCU*)cu)->toString();
 				default:
 					return "Unknown Type.";
 			}
@@ -234,7 +279,7 @@ class CUHelper {
 	
 };
 
-string ControlStructure :: toStringExpanded(){
+/*string ControlStructure :: toStringExpanded(){
 	ostringstream temp;
 	temp << "{";
 	for(vector<ControlUnit*>::iterator it = units.begin(); it != units.end(); it++) {
@@ -245,7 +290,7 @@ string ControlStructure :: toStringExpanded(){
 	}
 	temp << "}";
 	return temp.str();
-}
+}*/
 
 
 #endif

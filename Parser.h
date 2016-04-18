@@ -24,6 +24,7 @@ class Parser {
 		void readTokenByType(string type);
 		
 		void buildTree(string value, int numChildren);
+		void buildTree(string value, int numChildren, string type, string raw);
 	
 		void E();
 		void Ew();

@@ -1,17 +1,40 @@
 #ifndef FLATTENER_H
 #define FLATTENER_H
 
-#inlude <ControlUnit.h>
+#include "TreeNode.h"
+#include "ControlUnit.h"
 #include <queue>
+#include <string>
+#include <stdlib.h>
+#include <algorithm>
+
+class StructureList{
+	
+	public:
+		vector<ControlStructure*> list;
+	
+		static bool compare(const ControlStructure* cs1, const ControlStructure* cs2){
+		   return (cs1->structureNum) < (cs2->structureNum);
+		}
+
+		void addStructure(ControlStructure*);
+		string toString();
+	
+};
 
 class Flattener{
 	
-	int currLambda;
-	int structureNum;
-	queue<TreeNode*> nodeQueue;
+	
+	public:
+		StructureList* genStructureList(TreeNode* node);
+	
+	private:
+		int currLambda;
+		int structureNum;
+		queue<TreeNode*> nodeQueue;
 
-	vector<ControlStucture*>* getControlStructures(TreeNode* node);
-	ControlStructure* flatten(TreeNode* node);
+		ControlStructure* flatten(TreeNode* node, StructureList* sl);
+		void flatten(TreeNode* node, ControlStructure* cs, StructureList* sl);
 	
 };
 

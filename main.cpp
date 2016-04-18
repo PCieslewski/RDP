@@ -7,6 +7,8 @@ using namespace std;
 #include "Lexer.h"
 #include "Parser.h"
 #include "Standardizer.h"
+#include "Flattener.h"
+#include "ControlUnit.h"
 #include <vector>
 #include <utility>
 #include <string>
@@ -64,8 +66,16 @@ int main (int argc, char* argv[]){
 		cout << ast->toString() << endl;
 	}
 	
+	TreeNode* st = Standardizer :: standardize(ast);
+	
 	if(printSt){
-		cout << Standardizer :: standardize(ast)->toString() << endl;	
+		cout << st->toString() << endl;	
 	}
+	
+	Flattener flat;
+	
+	StructureList* sl = flat.genStructureList(st);
+	
+	cout << sl->toString() << endl;
   
 }

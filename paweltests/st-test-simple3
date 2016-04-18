@@ -1,0 +1,2 @@
+let F(x,y) = x + y in
+Print(F(2,4))

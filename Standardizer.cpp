@@ -211,7 +211,7 @@ TreeNode* Standardizer :: standardizeRec(TreeNode* node){
 	TreeNode* equals = new TreeNode("=");
 	TreeNode* gamma = new TreeNode("gamma");
 	TreeNode* lambda = new TreeNode("lambda");
-	TreeNode* ystar = new TreeNode("<Y*>");
+	TreeNode* ystar = new TreeNode("<Y*>", "Y", "Y");
 	
 	TreeNode* X = node->children.at(0)->children.at(0);
 	TreeNode* E = node->children.at(0)->children.at(1);

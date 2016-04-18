@@ -1,5 +1,5 @@
-p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o
-	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o -o p1
+p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o
+	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o -o p1
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -18,6 +18,12 @@ Parser.o: Parser.cpp Parser.h
 	
 Standardizer.o: Standardizer.cpp Standardizer.h
 	g++ -c Standardizer.cpp
+	
+ControlUnit.o: ControlUnit.cpp ControlUnit.h
+	g++ -c ControlUnit.cpp
+	
+Flattener.o: Flattener.cpp Flattener.h
+	g++ -c Flattener.cpp
 
 clean:
 	rm -f *.o p1 test
@@ -39,4 +45,7 @@ testst: p1 rpal
 	
 mainTest: 
 	g++ -c mainTest.cpp
-	g++ mainTest.o -o test
+	g++ -c Flattener.cpp
+	g++ -c ControlUnit.cpp
+	g++ -c TreeNode.cpp
+	g++ mainTest.o Flattener.o ControlUnit.o TreeNode.o -o test

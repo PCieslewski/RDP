@@ -11,9 +11,11 @@ class Token {
 	
 		string type;
 		string value;
+		string raw;
 	
 		Token();
 		Token(string type, string value);
+		Token(string type, string value, string raw);
 		string toString();
 	
 		bool valueIs(string value);

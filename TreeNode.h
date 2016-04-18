@@ -9,10 +9,12 @@ class TreeNode {
 	
 	public:
 	
-		TreeNode();
 		TreeNode(string value);
+		TreeNode(string value, string type, string raw);
 	
+		string type;
 		string value;
+		string raw;
 		vector<TreeNode*> children;
 		
 		void addChild(TreeNode* newChild);
@@ -20,6 +22,8 @@ class TreeNode {
 		string toString(int level);
 	
 		bool valueIs(string value);
+		bool typeIs(string value);
+		bool rawIs(string value);
 	
 };
 

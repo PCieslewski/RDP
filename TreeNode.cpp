@@ -1,11 +1,19 @@
 #include "TreeNode.h"
 
-TreeNode :: TreeNode(){
+/*TreeNode :: TreeNode(){
 	value = "";
-}
+}*/
 
 TreeNode :: TreeNode(string value){
 	this->value = value;
+	this->type = value;
+	this->raw = value;
+}
+
+TreeNode :: TreeNode(string value, string type, string raw){
+	this->value = value;
+	this->type = type;
+	this->raw = raw;
 }
 
 void TreeNode :: addChild(TreeNode* newChild){
@@ -47,4 +55,12 @@ string TreeNode :: toString(int level){
 
 bool TreeNode :: valueIs(string value){
 	return !(this->value.compare(value));
+}
+
+bool TreeNode :: typeIs(string type){
+	return !(this->type.compare(type));
+}
+
+bool TreeNode :: rawIs(string raw){
+	return !(this->raw.compare(raw));
 }

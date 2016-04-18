@@ -2,11 +2,12 @@
 #include <fstream>
 using namespace std;
 
+#include "Flattener.h"
 #include "ControlUnit.h"
 
 int main(){
 
-	LambdaCU* u1 = new LambdaCU("x",1);
+	LambdaCU* u1 = new LambdaCU(1);
 	GammaCU* u2 = new GammaCU();
 	EnvCU* u3 = new EnvCU(0);
 	IdCU* u4 = new IdCU("Test");
@@ -27,8 +28,8 @@ int main(){
 	cs1->pushBack(u8);
 	cs1->pushBack(u9);
 	
-	cout << cs1->toString() << endl;
-	cout << cs1->toStringExpanded() << endl;
+	//cout << cs1->toString() << endl;
+	//cout << cs1->toStringExpanded() << endl;
 	
 	ControlStructure* cs2 = new ControlStructure(2);
 	cs2->pushFront(u1);
@@ -42,7 +43,13 @@ int main(){
 	cs2->pushFront(u9);
 	cs2->pushFront(cs1);
 	
-	cout << cs2->toString() << endl;
-	cout << cs2->toStringExpanded() << endl;
+	//cout << cs2->toString() << endl;
+	//cout << cs2->toStringExpanded() << endl;
+	
+	StructureList* sl = new StructureList();
+	sl->addStructure(cs1);
+	sl->addStructure(cs2);
+	
+	cout << sl->toString() << endl;
 	
 }

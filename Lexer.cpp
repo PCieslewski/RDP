@@ -86,6 +86,7 @@ Token* Lexer :: getNextToken(){
 Token* Lexer :: getIdentifier(){
 	string type = "Identifier";
 	string value = "";
+	string raw = "";
 	
 	while(hasNext){
 		char a = getNextChar();
@@ -97,6 +98,8 @@ Token* Lexer :: getIdentifier(){
 			break;
 		}
 	}
+	
+	raw = value;
 	
 	if(
 	(!(value.compare("let"))) |
@@ -126,7 +129,7 @@ Token* Lexer :: getIdentifier(){
 		value = "<ID:" + value + ">";	
 	}
 	
-	return new Token(type, value);
+	return new Token(type, value, raw);
 }
 
 //Function that reads and deletes a comment.
@@ -144,6 +147,7 @@ void Lexer :: readComment(){
 Token* Lexer :: getInteger(){
 	string type = "Integer";
 	string value = "";
+	string raw = "";
 	
 	while(hasNext){
 		char a = getNextChar();
@@ -155,8 +159,10 @@ Token* Lexer :: getInteger(){
 			break;
 		}
 	}
+	
+	raw = value;
 	value = "<INT:" + value + ">";
-	return new Token(type, value);
+	return new Token(type, value, raw);
 }
 
 //Function that reads and returns an operator.
@@ -184,6 +190,7 @@ Token* Lexer :: getOperator(){
 Token* Lexer :: getString(){
 	string type = "String";
 	string value = "";
+	string raw = "";
 	value = value + getNextChar();
 	
 	while(hasNext){
@@ -201,8 +208,9 @@ Token* Lexer :: getString(){
 		}
 		
 		if(a == '\''){
+			raw = value;
 			value = "<STR:" + value + ">";
-			return new Token(type, value);
+			return new Token(type, value, raw);
 		}
 	}
 	
