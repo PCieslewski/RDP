@@ -19,24 +19,29 @@ string StructureList :: toString(){
 
 StructureList* Flattener :: genStructureList(TreeNode* node){
 	
-	currLambda = 1;
+	//currLambda = 1;
 	structureNum = 0;
 	StructureList* sl = new StructureList();
 	
-	sl->addStructure(flatten(node,sl));
+	ControlStructure* cs0 = new ControlStructure(structureNum);
+	structureNum++;
+	nodeQueue.push(node);
+	structureQueue.push(cs0);
 
 	while(!nodeQueue.empty()){
-		sl->addStructure(flatten(nodeQueue.front(), sl));
+		flatten(nodeQueue.front(), structureQueue.front(), sl);
+		sl->addStructure(structureQueue.front());
 		nodeQueue.pop();
+		structureQueue.pop();
 	}
 	
-	sort(sl->list.begin(), sl->list.end(), sl->compare);
+	//sort(sl->list.begin(), sl->list.end(), sl->compare);
 	
 	return sl;
 	
 }
 
-ControlStructure* Flattener :: flatten(TreeNode* node, StructureList* sl){
+/*ControlStructure* Flattener :: flatten(TreeNode* node, StructureList* sl){
 	
 	ControlStructure* cs = new ControlStructure(structureNum);
 	structureNum++;
@@ -45,7 +50,7 @@ ControlStructure* Flattener :: flatten(TreeNode* node, StructureList* sl){
 	
 	return cs;
 	
-}
+}*/
 
 void Flattener :: flatten(TreeNode* node, ControlStructure* cs, StructureList* sl){
 	
@@ -56,8 +61,9 @@ void Flattener :: flatten(TreeNode* node, ControlStructure* cs, StructureList* s
 		
 		TreeNode* left = node->children.at(0);
 		TreeNode* right = node->children.at(1);
-		LambdaCU* lam = new LambdaCU(currLambda);
-		currLambda++;
+		LambdaCU* lam = new LambdaCU(structureNum);
+		ControlStructure* nextCs = new ControlStructure(structureNum);
+		structureNum++;
 		
 		if(left->typeIs(",")){
 			for(vector<TreeNode*>::iterator it = left->children.begin(); it != left->children.end(); it++) {
@@ -71,6 +77,7 @@ void Flattener :: flatten(TreeNode* node, ControlStructure* cs, StructureList* s
 		cs->pushBack(lam);
 		
 		nodeQueue.push(node->children.at(1));
+		structureQueue.push(nextCs);
 		
 		return;
 		
@@ -96,19 +103,37 @@ void Flattener :: flatten(TreeNode* node, ControlStructure* cs, StructureList* s
 	else if(node->typeIs("String")){
 		cs->pushBack(new StringCU(node->raw));
 	}
-	else if(node->typeIs("->")){
-		ControlStructure* thenStructure = flatten(node->children.at(1), sl);
-		ControlStructure* elseStructure = flatten(node->children.at(2), sl);
-		cs->pushBack(thenStructure);
-		cs->pushBack(elseStructure);
-		cs->pushBack(new BetaCU());
-		flatten(node->children.at(0), cs, sl);
-		sl->addStructure(thenStructure);
-		sl->addStructure(elseStructure);
+	else if(node->typeIs("nil")){
+		cs->pushBack(new TupleCU());
+	}
+	else if(node->typeIs("dummy")){
+		cs->pushBack(new DummyCU());
+	}
+	else if(node->typeIs("Boolean")){
 		
-		//TEST
-		//currLambda++;
-		//currLambda++;
+		if(node->rawIs("true")){
+			cs->pushBack(new BooleanCU(true));
+		}
+		else{
+			cs->pushBack(new BooleanCU(false));
+		}
+		
+	}
+	else if(node->typeIs("->")){
+		
+		ControlStructure* thenStructure = new ControlStructure(structureNum);
+		nodeQueue.push(node->children.at(1));
+		structureQueue.push(thenStructure);
+		structureNum++;
+		cs->pushBack(thenStructure);
+		
+		ControlStructure* elseStructure = new ControlStructure(structureNum);
+		nodeQueue.push(node->children.at(2));
+		structureQueue.push(elseStructure);
+		structureNum++;
+		cs->pushBack(elseStructure);
+		
+		flatten(node->children.at(0), cs, sl);
 		
 		return;
 	}

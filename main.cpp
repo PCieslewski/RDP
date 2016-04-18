@@ -28,6 +28,7 @@ int main (int argc, char* argv[]){
 	bool print = false;
 	bool printfile = false;
 	bool printSt = false;
+	bool printCs = false;
 	
 	if(!ifstream(path.c_str())){
 		cout << "File does not exist!" << endl;
@@ -44,6 +45,9 @@ int main (int argc, char* argv[]){
 		}
 		else if(!arg.compare("-st")){
 			printSt = true;	
+		}
+		else if(!arg.compare("-cs")){
+			printCs = true;	
 		}
 	}
 	
@@ -76,6 +80,8 @@ int main (int argc, char* argv[]){
 	
 	StructureList* sl = flat.genStructureList(st);
 	
-	cout << sl->toString() << endl;
+	if(printCs){
+		cout << sl->toString() << endl;
+	}
   
 }

@@ -29,11 +29,12 @@ class Flattener{
 		StructureList* genStructureList(TreeNode* node);
 	
 	private:
-		int currLambda;
+		//int currLambda;
 		int structureNum;
 		queue<TreeNode*> nodeQueue;
+		queue<ControlStructure*> structureQueue;
 
-		ControlStructure* flatten(TreeNode* node, StructureList* sl);
+		//ControlStructure* flatten(TreeNode* node, StructureList* sl);
 		void flatten(TreeNode* node, ControlStructure* cs, StructureList* sl);
 	
 };

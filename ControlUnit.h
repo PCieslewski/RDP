@@ -8,7 +8,8 @@ using namespace std;
 
 enum UnitType {IDENTIFIER, ENVIORNMENT, LAMBDA,
 			   GAMMA, BINOP, UNOP, BETA, TAU, Y,
-			   STRUCTURE, INTEGER, STRING};
+			   STRUCTURE, INTEGER, STRING, BOOLEAN,
+			   TUPLE, DUMMY};
 
 class CUHelper;
 class ControlStructure;
@@ -210,6 +211,65 @@ class StringCU: public ControlUnit {
 	
 };
 
+class BooleanCU: public ControlUnit {
+	
+	public:
+		bool value;
+	
+		BooleanCU(bool value): ControlUnit(BOOLEAN){
+			this->value = value;
+		}
+	
+		string toString(){
+			if(value==true){
+				return "true";		
+			}
+			else{
+				return "false";
+			}
+		}
+	
+};
+
+class TupleCU: public ControlUnit {
+	
+	public:
+		vector<ControlUnit*> list; 
+	
+		TupleCU(): ControlUnit(TUPLE){}
+	
+		string toString(){
+			if(list.empty()){
+				return "nil";	
+			}
+			else{
+				ostringstream temp;
+				temp << "(";
+				for(vector<ControlUnit*>::iterator it = list.begin(); it != list.end(); it++) {
+					temp << (*it)->toString();
+					if(it+1 != list.end()){
+						temp << ", ";
+					}
+				}
+				temp << ")";
+				return temp.str();
+			}
+		}
+	
+};
+
+class DummyCU: public ControlUnit {
+	
+	public:
+	
+		DummyCU(): ControlUnit(DUMMY){}
+	
+		string toString(){
+			return "Dummy";
+		}
+	
+};
+
 class ControlStructure: public ControlUnit {
 
 	public:
@@ -268,14 +328,16 @@ class CUHelper {
 					return ((IntegerCU*)cu)->toString();
 				case(STRING):
 					return ((StringCU*)cu)->toString();
+				case(BOOLEAN):
+					return ((BooleanCU*)cu)->toString();
+				case(TUPLE):
+					return ((TupleCU*)cu)->toString();
+				case(DUMMY):
+					return ((DummyCU*)cu)->toString();
 				default:
 					return "Unknown Type.";
 			}
 		}
-	
-		//static ControlUnit* getCUFromNode(TreeNode*){
-			
-		//}
 	
 };
 
