@@ -5,13 +5,31 @@ using namespace std;
 #include <string>
 #include <vector>
 #include <sstream>
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
 
 enum UnitType {IDENTIFIER, ENVIORNMENT, LAMBDA,
 			   GAMMA, BINOP, UNOP, BETA, TAU, Y,
 			   STRUCTURE, INTEGER, STRING, BOOLEAN,
-			   TUPLE, DUMMY, FUNCTION};
+			   TUPLE, DUMMY, FUNCTION, ETA};
 
-class CUHelper;
+class ControlUnit;
+class IdCU;
+class FunctionCU;
+class EnvCU;
+class LambdaCU;
+class GammaCU;
+class BinopCU;
+class UnopCU;
+class BetaCU;
+class TauCU;
+class YCU;
+class IntegerCU;
+class StringCU;
+class BooleanCU;
+class TupleCU;
+class DummyCU;
 class ControlStructure;
 
 class ControlUnit {
@@ -238,7 +256,7 @@ class StringCU: public ControlUnit {
 	
 		string toString(){
 			//return "Str." + value;
-			return "'" + value + "'";
+			return value;
 		}
 	
 };
@@ -270,22 +288,10 @@ class TupleCU: public ControlUnit {
 	
 		TupleCU(): ControlUnit(TUPLE){}
 	
-		string toString(){
-			if(list.empty()){
-				return "nil";	
-			}
-			else{
-				ostringstream temp;
-				temp << "(";
-				for(vector<ControlUnit*>::iterator it = list.begin(); it != list.end(); it++) {
-					temp << (*it)->toString();
-					if(it+1 != list.end()){
-						temp << ", ";
-					}
-				}
-				temp << ")";
-				return temp.str();
-			}
+		string toString();
+	
+		void insert(ControlUnit* cu){
+			list.push_back(cu);	
 		}
 	
 };
@@ -298,6 +304,22 @@ class DummyCU: public ControlUnit {
 	
 		string toString(){
 			return "Dummy";
+		}
+	
+};
+
+class EtaCU: public ControlUnit {
+	
+	public:
+	
+		LambdaCU* recLambda;
+	
+		EtaCU(LambdaCU* recLambda): ControlUnit(ETA){
+			this->recLambda = recLambda;
+		}
+	
+		string toString(){
+			return "Eta";
 		}
 	
 };
@@ -368,10 +390,126 @@ class CUHelper {
 					return ((DummyCU*)cu)->toString();
 				case(FUNCTION):
 					return ((FunctionCU*)cu)->toString();
+				case(ETA):
+					return ((EtaCU*)cu)->toString();
 				default:
 					return "Unknown Type.";
 			}
 		}
+	
+		static bool ls(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return ((IntegerCU*)cu1)->num < ((IntegerCU*)cu2)->num;
+			}
+			else if( (cu1->type == STRING) && (cu1->type == STRING) ){
+				return ((StringCU*)cu1)->value < ((StringCU*)cu2)->value;
+			}
+			else{
+				cout << "Unexpected Comparison Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static bool eq(ControlUnit* cu1, ControlUnit* cu2){
+			return (!ls(cu1,cu2)) && (!ls(cu2,cu1));	
+		}
+
+		static bool ge(ControlUnit* cu1, ControlUnit* cu2){
+			return !ls(cu1,cu2);	
+		}
+	
+		static bool le(ControlUnit* cu1, ControlUnit* cu2){
+			return ls(cu1,cu2) || eq(cu1,cu2);	
+		}
+	
+		static bool gr(ControlUnit* cu1, ControlUnit* cu2){
+			return !le(cu1,cu2);
+		}
+	
+		static int add(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return ((IntegerCU*)cu1)->num + ((IntegerCU*)cu2)->num;
+			}
+			else{
+				cout << "Unexpected Addition Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+		
+		static int subtract(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return ((IntegerCU*)cu1)->num - ((IntegerCU*)cu2)->num;
+			}
+			else{
+				cout << "Unexpected Subtraction Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static int multiply(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return ((IntegerCU*)cu1)->num * ((IntegerCU*)cu2)->num;
+			}
+			else{
+				cout << "Unexpected Multiplication Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static int divide(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return ((IntegerCU*)cu1)->num / ((IntegerCU*)cu2)->num;
+			}
+			else{
+				cout << "Unexpected Division Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static int power(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
+				return pow(((IntegerCU*)cu1)->num,((IntegerCU*)cu2)->num);
+			}
+			else{
+				cout << "Unexpected Power Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static bool logicalAnd(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == BOOLEAN) && (cu1->type == BOOLEAN) ){
+				return ((BooleanCU*)cu1)->value && ((BooleanCU*)cu2)->value;
+			}
+			else{
+				cout << "Unexpected Logical And Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static bool logicalOr(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == BOOLEAN) && (cu1->type == BOOLEAN) ){
+				return ((BooleanCU*)cu1)->value || ((BooleanCU*)cu2)->value;
+			}
+			else{
+				cout << "Unexpected Logical Or Types" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static ControlUnit* aug(ControlUnit* cu1, ControlUnit* cu2){
+			if( (cu1->type == TUPLE) ){
+				((TupleCU*)cu1)->insert(cu2);
+				return cu1;
+			}
+			else{
+				cout << "Augment to non tuple." << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+	
+	
+		
 	
 };
 

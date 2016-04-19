@@ -133,6 +133,8 @@ void Flattener :: flatten(TreeNode* node, ControlStructure* cs, StructureList* s
 		structureNum++;
 		cs->pushBack(elseStructure);
 		
+		cs->pushBack(new BetaCU());
+		
 		flatten(node->children.at(0), cs, sl);
 		
 		return;

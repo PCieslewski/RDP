@@ -35,6 +35,11 @@ class CSEMachine {
 		void lookupId();
 		void returnFromEnv();
 		void exeBinop();
+		void exeTau();
+		void moveY();
+		void exeGammaOnY();
+		void exeGammaOnEta();
+		void exeBeta();
 	
 	public:
 		CSEMachine(StructureList* sl);

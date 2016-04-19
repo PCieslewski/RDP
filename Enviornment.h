@@ -37,6 +37,7 @@ class Enviornment {
 		void addBinding(string str, ControlUnit* cu);
 		ControlUnit* getBinding(string str);
 		Enviornment* returningEnv;
+		string toString();
 	
 };
 

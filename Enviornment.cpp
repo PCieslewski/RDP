@@ -30,4 +30,23 @@ ControlUnit* Enviornment :: getBinding(string str){
 	}
 	
 }
+
+string Enviornment :: toString(){
+	
+	ostringstream temp;
+	
+	if(returningEnv == NULL){
+		return "End";	
+	}
+	
+	vector<BoundPair>::iterator it;
+	for(it = bindings.begin(); it != bindings.end(); it++) {
+		temp << (*it).str << "=" << CUHelper :: getString((*it).cu) << " ";
+	}
+	
+	temp << returningEnv->toString();	
+	
+	return temp.str();
+	
+}
 	

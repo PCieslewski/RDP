@@ -88,6 +88,73 @@ int main (int argc, char* argv[]){
 	
 	CSEMachine* cse = new CSEMachine(sl);
 	cse->run();
-	//cout << cse->output.str() << endl;
+	
+	/*cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();
+	cse->tick();*/
+	
+	cout << cse->output.str() << endl;
   
 }
