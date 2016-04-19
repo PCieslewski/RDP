@@ -9,6 +9,8 @@ using namespace std;
 #include "Standardizer.h"
 #include "Flattener.h"
 #include "ControlUnit.h"
+#include "Enviornment.h"
+#include "CSEMachine.h"
 #include <vector>
 #include <utility>
 #include <string>
@@ -83,5 +85,9 @@ int main (int argc, char* argv[]){
 	if(printCs){
 		cout << sl->toString() << endl;
 	}
+	
+	CSEMachine* cse = new CSEMachine(sl);
+	cse->run();
+	//cout << cse->output.str() << endl;
   
 }

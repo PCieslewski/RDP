@@ -1,5 +1,5 @@
-p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o
-	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o -o p1
+p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o
+	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o -o p1
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -24,6 +24,12 @@ ControlUnit.o: ControlUnit.cpp ControlUnit.h
 	
 Flattener.o: Flattener.cpp Flattener.h
 	g++ -c Flattener.cpp
+	
+Enviornment.o: Enviornment.cpp Enviornment.h
+	g++ -c Enviornment.cpp
+	
+CSEMachine.o: CSEMachine.cpp CSEMachine.h
+	g++ -c CSEMachine.cpp
 
 clean:
 	rm -f *.o p1 test

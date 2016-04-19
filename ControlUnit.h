@@ -9,7 +9,7 @@ using namespace std;
 enum UnitType {IDENTIFIER, ENVIORNMENT, LAMBDA,
 			   GAMMA, BINOP, UNOP, BETA, TAU, Y,
 			   STRUCTURE, INTEGER, STRING, BOOLEAN,
-			   TUPLE, DUMMY};
+			   TUPLE, DUMMY, FUNCTION};
 
 class CUHelper;
 class ControlStructure;
@@ -43,6 +43,29 @@ class IdCU: public ControlUnit {
 	
 		string toString(){
 			return "Id:"+name;
+		}
+	
+		bool nameIs(string name){
+			return !(this->name.compare(name));
+		}
+	
+};
+
+class FunctionCU: public ControlUnit {
+	
+	public:
+		string name;
+	
+		FunctionCU(string name): ControlUnit(FUNCTION){
+			this->name = name;
+		}
+	
+		string toString(){
+			return "Func:"+name;
+		}
+	
+		bool nameIs(string name){
+			return !(this->name.compare(name));
 		}
 	
 };
@@ -120,6 +143,10 @@ class BinopCU: public ControlUnit {
 			return op;
 		}
 	
+		bool opIs(string op){
+			return !(this->op.compare(op));
+		}
+	
 };
 
 class UnopCU: public ControlUnit {
@@ -133,6 +160,10 @@ class UnopCU: public ControlUnit {
 	
 		string toString(){
 			return op;
+		}
+	
+		bool opIs(string op){
+			return !(this->op.compare(op));
 		}
 	
 };
@@ -189,7 +220,7 @@ class IntegerCU: public ControlUnit {
 	
 		string toString(){
 			ostringstream temp;
-			temp << "Int.";
+			//temp << "Int.";
 			temp << num;
 			return temp.str();
 		}
@@ -206,7 +237,8 @@ class StringCU: public ControlUnit {
 		}
 	
 		string toString(){
-			return "Str." + value;
+			//return "Str." + value;
+			return "'" + value + "'";
 		}
 	
 };
@@ -334,6 +366,8 @@ class CUHelper {
 					return ((TupleCU*)cu)->toString();
 				case(DUMMY):
 					return ((DummyCU*)cu)->toString();
+				case(FUNCTION):
+					return ((FunctionCU*)cu)->toString();
 				default:
 					return "Unknown Type.";
 			}
