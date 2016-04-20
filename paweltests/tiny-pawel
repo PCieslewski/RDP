@@ -68,7 +68,7 @@ let rec EE E (m,i,o) =
     )
  | 'error'
 in 
-Print( EE ('not', 'not') (1,2,3) )
+Print( Stem '' )
 
 
 

@@ -546,8 +546,14 @@ void CSEMachine :: callStern(){
 	StringCU* str = (StringCU*)exeStack.front();
 	exeStack.pop_front();
 	
-	StringCU* stern = new StringCU(str->value.substr(1,str->value.length()));
-	exeStack.push_front(stern);
+	if(str->valueIs("")){
+		StringCU* stern = new StringCU("");
+		exeStack.push_front(stern);
+	}
+	else{
+		StringCU* stern = new StringCU(str->value.substr(1,str->value.length()));
+		exeStack.push_front(stern);
+	}
 	
 }
 

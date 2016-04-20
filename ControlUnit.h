@@ -275,6 +275,10 @@ class StringCU: public ControlUnit {
 			return value;
 		}
 	
+		bool valueIs(string value){
+			return !(this->value.compare(value));
+		}
+	
 };
 
 class BooleanCU: public ControlUnit {
