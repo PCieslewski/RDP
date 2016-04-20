@@ -42,12 +42,17 @@ cl:
 test: p1 rpal
 	chmod +x p1
 	chmod +x rpal
-	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast FILE" -t tests/
+	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast -noout FILE" -t tests/
 	
 testst: p1 rpal
 	chmod +x p1
 	chmod +x rpal
 	perl difftest.pl -1 "./rpal -st -noout FILE" -2 "./p1 -st -noout FILE" -t tests/
+	
+testfull: p1 rpal
+	chmod +x p1
+	chmod +x rpal
+	perl difftest.pl -1 "./rpal FILE" -2 "./p1 FILE" -t tests/
 	
 mainTest: 
 	g++ -c mainTest.cpp

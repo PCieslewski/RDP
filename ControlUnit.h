@@ -73,6 +73,7 @@ class FunctionCU: public ControlUnit {
 	
 	public:
 		string name;
+		string dataStr;
 	
 		FunctionCU(string name): ControlUnit(FUNCTION){
 			this->name = name;
@@ -172,7 +173,7 @@ class UnopCU: public ControlUnit {
 	public:
 		string op;
 	
-		UnopCU(string op): ControlUnit(BINOP){
+		UnopCU(string op): ControlUnit(UNOP){
 			this->op = op;
 		}
 	
@@ -256,6 +257,7 @@ class StringCU: public ControlUnit {
 	
 		string toString(){
 			//return "Str." + value;
+			//return "'" + value + "'";
 			return value;
 		}
 	
@@ -291,6 +293,12 @@ class TupleCU: public ControlUnit {
 		string toString();
 	
 		void insert(ControlUnit* cu){
+			
+			if(cu->type == ENVIORNMENT){
+				cout << "Cannot add enviornment to tuple." << endl;
+				exit(EXIT_FAILURE);
+			}
+			
 			list.push_back(cu);	
 		}
 	
@@ -426,6 +434,10 @@ class CUHelper {
 			return !le(cu1,cu2);
 		}
 	
+		static bool ne(ControlUnit* cu1, ControlUnit* cu2){
+			return !eq(cu1,cu2);
+		}
+	
 		static int add(ControlUnit* cu1, ControlUnit* cu2){
 			if( (cu1->type == INTEGER) && (cu1->type == INTEGER) ){
 				return ((IntegerCU*)cu1)->num + ((IntegerCU*)cu2)->num;
@@ -503,6 +515,26 @@ class CUHelper {
 			}
 			else{
 				cout << "Augment to non tuple." << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static bool logicalNot(ControlUnit* cu){
+			if( (cu->type == BOOLEAN) ){
+				return !(((BooleanCU*)cu)->value);
+			}
+			else{
+				cout << "Unexpected Logical Not type" << endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+		static int neg(ControlUnit* cu){
+			if( (cu->type == INTEGER) ){
+				return -(((IntegerCU*)cu)->num);
+			}
+			else{
+				cout << "Unexpected neg type" << endl;
 				exit(EXIT_FAILURE);
 			}
 		}

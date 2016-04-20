@@ -208,7 +208,9 @@ Token* Lexer :: getString(){
 		}
 		
 		if(a == '\''){
-			raw = value;
+			//EXP
+			//raw = value;
+			raw = value.substr(1,value.length()-2);
 			value = "<STR:" + value + ">";
 			return new Token(type, value, raw);
 		}

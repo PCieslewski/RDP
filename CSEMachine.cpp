@@ -1,12 +1,16 @@
 #include "CSEMachine.h"
 
-CSEMachine :: CSEMachine(StructureList* sl){
+CSEMachine :: CSEMachine(StructureList* sl, bool printExe){
 	this->sl = sl;
 	currEnv = 0;
 	maxEnv = 0;
 	init();
 	done = false;
-	cout << stateToString() << endl;
+	this->printExe = printExe;
+	
+	if(printExe){
+		cout << stateToString() << endl;
+	}
 }
 
 string CSEMachine :: stateToString(){
@@ -85,6 +89,9 @@ void CSEMachine :: tick(){
 		case BINOP:
 			exeBinop();
 			break;
+		case UNOP:
+			exeUnop();
+			break;
 		case TAU:
 			exeTau();
 			break;
@@ -94,12 +101,26 @@ void CSEMachine :: tick(){
 		case BETA:
 			exeBeta();
 			break;
+		case STRING:
+			moveString();
+			break;
+		case BOOLEAN:
+			moveBoolean();
+			break;
+		case TUPLE:
+			move();
+			break;
+		case DUMMY:
+			move();
+			break;
 		default:
 			cout << "Unexpected ControlUnit type : " << controlStack.back()->type << endl;
 			exit(EXIT_FAILURE);
 	}
 	
-	cout << stateToString() << endl;
+	if(printExe){
+		cout << stateToString() << endl;
+	}
 	
 }
 
@@ -158,6 +179,9 @@ void CSEMachine :: exeGamma(){
 		case ETA:
 			exeGammaOnEta();
 			break;
+		case TUPLE:
+			exeGammaOnTuple();
+			break;
 		default:
 			cout << "Unexpected ControlUnit for gamma execution : " << controlStack.back()->type << endl;
 			exit(EXIT_FAILURE);
@@ -212,10 +236,45 @@ void CSEMachine :: exeGammaOnFunction(){
 	GammaCU* gcu = (GammaCU*)controlStack.back();
 	FunctionCU* fcu = (FunctionCU*)exeStack.front();
 	controlStack.pop_back();
-	exeStack.pop_front();
 	
 	if(fcu->nameIs("Print")){
 		callPrint();
+	}
+	else if(fcu->nameIs("Stem")){
+		callStem();
+	}
+	else if(fcu->nameIs("Stern")){
+		callStern();
+	}
+	else if(fcu->nameIs("Conc1")){
+		callConcP1();
+	}
+	else if(fcu->nameIs("Conc2")){
+		callConcP2();
+	}
+	else if(fcu->nameIs("Order")){
+		callOrder();
+	}
+	else if(fcu->nameIs("ItoS")){
+		callItoS();
+	}
+	else if(fcu->nameIs("Istuple")){
+		callIstuple();
+	}
+	else if(fcu->nameIs("Isfunction")){
+		callIsfunction();
+	}
+	else if(fcu->nameIs("Isdummy")){
+		callIsdummy();
+	}
+	else if(fcu->nameIs("Isstring")){
+		callIsstring();
+	}
+	else if(fcu->nameIs("Isinteger")){
+		callIsinteger();
+	}
+	else if(fcu->nameIs("Istruthvalue")){
+		callIstruthvalue();
 	}
 	else{
 		cout << "Unknown function : " << fcu->name << endl;
@@ -226,8 +285,12 @@ void CSEMachine :: exeGammaOnFunction(){
 
 void CSEMachine :: callPrint(){
 	
+	exeStack.pop_front();
+	
 	ControlUnit* cu = exeStack.front();
 	exeStack.pop_front();
+	
+	exeStack.push_front(new DummyCU());
 	
 	output << CUHelper :: getString(cu);
 	
@@ -246,6 +309,33 @@ void CSEMachine :: lookupId(){
 	}
 	else if(icu->nameIs("Stern")){
 		exeStack.push_front(new FunctionCU("Stern"));	
+	}
+	else if(icu->nameIs("Conc")){
+		exeStack.push_front(new FunctionCU("Conc1"));	
+	}
+	else if(icu->nameIs("Order")){
+		exeStack.push_front(new FunctionCU("Order"));	
+	}
+	else if(icu->nameIs("ItoS")){
+		exeStack.push_front(new FunctionCU("ItoS"));	
+	}
+	else if(icu->nameIs("Istuple")){
+		exeStack.push_front(new FunctionCU("Istuple"));	
+	}
+	else if(icu->nameIs("Isfunction")){
+		exeStack.push_front(new FunctionCU("Isfunction"));	
+	}
+	else if(icu->nameIs("Isdummy")){
+		exeStack.push_front(new FunctionCU("Isdummy"));	
+	}
+	else if(icu->nameIs("Isstring")){
+		exeStack.push_front(new FunctionCU("Isstring"));	
+	}
+	else if(icu->nameIs("Isinteger")){
+		exeStack.push_front(new FunctionCU("Isinteger"));	
+	}
+	else if(icu->nameIs("Istruthvalue")){
+		exeStack.push_front(new FunctionCU("Istruthvalue"));	
 	}
 	else{
 		exeStack.push_front(el.at(currEnv)->getBinding(icu->name));
@@ -278,7 +368,7 @@ void CSEMachine :: returnFromEnv(){
 		for (it = exeStack.begin(); it != exeStack.end(); it++){
 			if((*it)->type == ENVIORNMENT){
 				currEnv = ((EnvCU*)(*it))->envNumber;
-				cout << "CHANGING ENV TO " << currEnv << endl;
+				//cout << "CHANGING ENV TO " << currEnv << endl;
 				break;
 			}
 		}
@@ -334,6 +424,9 @@ void CSEMachine :: exeBinop(){
 	}
 	else if(bcu->opIs("eq")){
 		exeStack.push_front(new BooleanCU(CUHelper :: eq(cu1, cu2)));
+	}
+	else if(bcu->opIs("ne")){
+		exeStack.push_front(new BooleanCU(CUHelper :: ne(cu1, cu2)));
 	}
 	else{
 		cout << "Unexpected Binop Operator" << endl;
@@ -412,5 +505,203 @@ void CSEMachine :: exeBeta(){
 	
 }
 
+void CSEMachine :: moveString(){
+	
+	exeStack.push_front(controlStack.back());
+	controlStack.pop_back();
+	
+}
 
+void CSEMachine :: moveBoolean(){
+	
+	exeStack.push_front(controlStack.back());
+	controlStack.pop_back();
+	
+}
 
+void CSEMachine :: callStem(){
+	
+	exeStack.pop_front();
+	
+	StringCU* str = (StringCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	StringCU* stem = new StringCU(str->value.substr(0,1));
+	exeStack.push_front(stem);
+	
+}
+
+void CSEMachine :: callStern(){
+	
+	exeStack.pop_front();
+	
+	StringCU* str = (StringCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	StringCU* stern = new StringCU(str->value.substr(1,str->value.length()));
+	exeStack.push_front(stern);
+	
+}
+
+void CSEMachine :: callConcP1(){
+	
+	exeStack.pop_front();
+	
+	StringCU* str = (StringCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	FunctionCU* conc2 = new FunctionCU("Conc2");
+	conc2->dataStr = str->value;
+	
+	exeStack.push_front(conc2);
+	
+}
+
+void CSEMachine :: callConcP2(){
+	
+	FunctionCU* conc2 = (FunctionCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	StringCU* str = (StringCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	StringCU* ans = new StringCU(conc2->dataStr + str->value);
+	
+	exeStack.push_front(ans);
+	
+}
+
+void CSEMachine :: exeGammaOnTuple(){
+	
+	controlStack.pop_back();
+	
+	TupleCU* tup = (TupleCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	IntegerCU* num = (IntegerCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(tup->list.at(num->num-1)); //-1 for 1 index in rpal???
+	
+}
+
+void CSEMachine :: callOrder(){
+	
+	exeStack.pop_front();
+	
+	TupleCU* tup = (TupleCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new IntegerCU(tup->list.size()));
+	
+}
+	
+void CSEMachine :: callItoS(){
+	
+	exeStack.pop_front();
+	
+	IntegerCU* icu = (IntegerCU*)exeStack.front();
+	exeStack.pop_front();
+	
+	ostringstream temp;
+	temp << icu->num;
+	
+	exeStack.push_front(new StringCU(temp.str()));
+	
+}
+
+void CSEMachine :: callIstuple(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == TUPLE));
+	
+}
+
+void CSEMachine :: callIsfunction(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == LAMBDA));
+	
+}
+
+void CSEMachine :: callIsdummy(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == DUMMY));
+	
+}
+
+void CSEMachine :: callIsstring(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == STRING));
+	
+}
+
+void CSEMachine :: callIsinteger(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == INTEGER));
+	
+}
+
+void CSEMachine :: callIstruthvalue(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	exeStack.push_front(new BooleanCU(cu->type == BOOLEAN));
+	
+}
+
+void CSEMachine :: exeUnop(){
+	
+	BinopCU* bcu = (BinopCU*)controlStack.back();
+	controlStack.pop_back();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	if(bcu->opIs("not")){
+		exeStack.push_front(new BooleanCU(CUHelper :: logicalNot(cu)));
+	}
+	else if(bcu->opIs("neg")){
+		exeStack.push_front(new IntegerCU(CUHelper :: neg(cu)));
+	}
+	else{
+		cout << "Unexpected Unop Operator" << endl;
+		exit(EXIT_FAILURE);
+	}
+	
+}
+
+void CSEMachine :: move(){
+	
+	exeStack.push_front(controlStack.back());
+	controlStack.pop_back();
+	
+}
+	
+	

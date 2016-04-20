@@ -24,6 +24,8 @@ getAst on it to generate the AST. Then it prints the AST
 if the -ast flag was set.
 */
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
+
 int main (int argc, char* argv[]){
 	
 	string path = string(argv[argc-1]);
@@ -31,6 +33,8 @@ int main (int argc, char* argv[]){
 	bool printfile = false;
 	bool printSt = false;
 	bool printCs = false;
+	bool printExe = false;
+	bool printOutput = true;
 	
 	if(!ifstream(path.c_str())){
 		cout << "File does not exist!" << endl;
@@ -50,6 +54,12 @@ int main (int argc, char* argv[]){
 		}
 		else if(!arg.compare("-cs")){
 			printCs = true;	
+		}
+		else if(!arg.compare("-ex")){
+			printExe = true;	
+		}
+		else if(!arg.compare("-noout")){
+			printOutput = false;	
 		}
 	}
 	
@@ -86,75 +96,24 @@ int main (int argc, char* argv[]){
 		cout << sl->toString() << endl;
 	}
 	
-	CSEMachine* cse = new CSEMachine(sl);
-	cse->run();
-	
-	/*cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();
-	cse->tick();*/
-	
-	cout << cse->output.str() << endl;
+	if(printOutput){
+		CSEMachine* cse = new CSEMachine(sl, printExe);
+		cse->run();
+		
+		string out = cse->output.str();
+		replaceAll(out, "\\n", "\n");
+		replaceAll(out, "\\t", "\t");
+		cout << out << endl;
+	}
   
+}
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+	if(from.empty())
+		return;
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length();
+	}
 }

@@ -35,19 +35,37 @@ class CSEMachine {
 		void lookupId();
 		void returnFromEnv();
 		void exeBinop();
+		void exeUnop();
 		void exeTau();
 		void moveY();
 		void exeGammaOnY();
 		void exeGammaOnEta();
 		void exeBeta();
+		void moveString();
+		void moveBoolean();
+		void callStem();
+		void callStern();
+		void callConcP1();
+		void callConcP2();
+		void exeGammaOnTuple();
+		void callOrder();
+		void callItoS();
+		void callIstuple();
+		void callIsfunction();
+		void callIsdummy();
+		void callIsstring();
+		void callIsinteger();
+		void callIstruthvalue();
+		void move();
 	
 	public:
-		CSEMachine(StructureList* sl);
+		CSEMachine(StructureList* sl, bool printExe);
 		string stateToString();
 		void run();
 		void tick();
 		ostringstream output;
 		bool done;
+		bool printExe;
 	
 };
 
