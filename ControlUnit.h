@@ -124,6 +124,8 @@ class LambdaCU: public ControlUnit {
 		}
 	
 		string toString(){
+			
+			/*
 			ostringstream temp;
 			temp << "Lambda.";
 			temp << lambdaNum;
@@ -131,6 +133,18 @@ class LambdaCU: public ControlUnit {
 			for(vector<string>::iterator it = bindingVars.begin(); it != bindingVars.end(); it++) {
 				temp << "." << *it;
 			}
+			
+			return temp.str();
+			*/
+			
+			ostringstream temp;
+			temp << "[lambda closure: ";
+			
+			for(vector<string>::iterator it = bindingVars.begin(); it != bindingVars.end(); it++) {
+				temp << *it << ": ";
+			}
+			
+			temp << lambdaNum << "]";
 			
 			return temp.str();
 		}

@@ -207,7 +207,9 @@ void CSEMachine :: exeGammaOnLambda(){
 	controlStack.push_back(new EnvCU(currEnv));
 	exeStack.push_front(new EnvCU(currEnv));
 	
-	expandStructure(sl->list.at(lcu->lambdaNum));
+	//EXPPPPPPPPPPPP
+	//expandStructure(sl->list.at(lcu->lambdaNum));
+	controlStack.push_back(sl->list.at(lcu->lambdaNum));
 	
 }
 
@@ -276,6 +278,9 @@ void CSEMachine :: exeGammaOnFunction(){
 	else if(fcu->nameIs("Istruthvalue")){
 		callIstruthvalue();
 	}
+	else if(fcu->nameIs("Null")){
+		callNull();
+	}
 	else{
 		cout << "Unknown function : " << fcu->name << endl;
 		exit(EXIT_FAILURE);	
@@ -336,6 +341,9 @@ void CSEMachine :: lookupId(){
 	}
 	else if(icu->nameIs("Istruthvalue")){
 		exeStack.push_front(new FunctionCU("Istruthvalue"));	
+	}
+	else if(icu->nameIs("Null")){
+		exeStack.push_front(new FunctionCU("Null"));	
 	}
 	else{
 		exeStack.push_front(el.at(currEnv)->getBinding(icu->name));
@@ -673,6 +681,25 @@ void CSEMachine :: callIstruthvalue(){
 	exeStack.pop_front();
 	
 	exeStack.push_front(new BooleanCU(cu->type == BOOLEAN));
+	
+}
+
+void CSEMachine :: callNull(){
+	
+	exeStack.pop_front();
+	
+	ControlUnit* cu = exeStack.front();
+	exeStack.pop_front();
+	
+	if(cu->type == TUPLE){
+		TupleCU* tup = (TupleCU*)cu;
+		if(tup->list.empty()){
+			exeStack.push_front(new BooleanCU(true));
+			return;
+		}
+	}
+	
+	exeStack.push_front(new BooleanCU(false));
 	
 }
 

@@ -57,6 +57,7 @@ class CSEMachine {
 		void callIsinteger();
 		void callIstruthvalue();
 		void move();
+		void callNull();
 	
 	public:
 		CSEMachine(StructureList* sl, bool printExe);

@@ -32,7 +32,7 @@ CSEMachine.o: CSEMachine.cpp CSEMachine.h
 	g++ -c CSEMachine.cpp
 
 clean:
-	rm -f *.o p1 test
+	rm -f *.o p1 test LOL.txt
 	rm -f -r diffresult
 	
 cl:
