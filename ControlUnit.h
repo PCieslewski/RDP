@@ -67,6 +67,10 @@ class IdCU: public ControlUnit {
 			return !(this->name.compare(name));
 		}
 	
+		IdCU* copy(){
+			return new IdCU(this->name);	
+		}
+	
 };
 
 class FunctionCU: public ControlUnit {
@@ -87,6 +91,11 @@ class FunctionCU: public ControlUnit {
 			return !(this->name.compare(name));
 		}
 	
+		FunctionCU* copy(){
+			FunctionCU* fcu = new FunctionCU(this->name);
+			fcu->dataStr = this->dataStr;
+		}
+	
 };
 
 class EnvCU: public ControlUnit {
@@ -103,6 +112,10 @@ class EnvCU: public ControlUnit {
 			temp << "e.";
 			temp << envNumber;
 			return temp.str();
+		}
+	
+		EnvCU* copy(){
+			return new EnvCU(this->envNumber);	
 		}
 	
 };
@@ -149,6 +162,13 @@ class LambdaCU: public ControlUnit {
 			return temp.str();
 		}
 	
+		LambdaCU* copy(){
+			LambdaCU* lam = new LambdaCU(this->lambdaNum);
+			lam->currEnv = this->currEnv;
+			lam->bindingVars = this->bindingVars;
+			return lam;
+		}
+	
 };
 
 class GammaCU: public ControlUnit {
@@ -159,6 +179,10 @@ class GammaCU: public ControlUnit {
 	
 		string toString(){
 			return "Gamma";
+		}
+	
+		GammaCU* copy(){
+			return new GammaCU();	
 		}
 	
 };
@@ -180,6 +204,10 @@ class BinopCU: public ControlUnit {
 			return !(this->op.compare(op));
 		}
 	
+		BinopCU* copy(){
+			return new BinopCU(this->op);	
+		}
+	
 };
 
 class UnopCU: public ControlUnit {
@@ -199,6 +227,10 @@ class UnopCU: public ControlUnit {
 			return !(this->op.compare(op));
 		}
 	
+		UnopCU* copy(){
+			return new UnopCU(this->op);	
+		}
+	
 };
 
 class BetaCU: public ControlUnit {
@@ -209,6 +241,10 @@ class BetaCU: public ControlUnit {
 	
 		string toString(){
 			return "Beta";
+		}
+	
+		BetaCU* copy(){
+			return new BetaCU();	
 		}
 	
 };
@@ -229,6 +265,10 @@ class TauCU: public ControlUnit {
 			return temp.str();
 		}
 	
+		TauCU* copy(){
+			return new TauCU(this->num);	
+		}
+	
 };
 
 class YCU: public ControlUnit {
@@ -238,6 +278,10 @@ class YCU: public ControlUnit {
 	
 		string toString(){
 			return "Y";
+		}
+	
+		YCU* copy(){
+			return new YCU();	
 		}
 	
 };
@@ -256,6 +300,10 @@ class IntegerCU: public ControlUnit {
 			//temp << "Int.";
 			temp << num;
 			return temp.str();
+		}
+	
+		IntegerCU* copy(){
+			return new IntegerCU(this->num);	
 		}
 	
 };

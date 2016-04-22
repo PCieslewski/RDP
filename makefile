@@ -39,7 +39,7 @@ cl:
 	rm -f *.o p1 test
 	rm -f -r diffresult
 	
-test: p1 rpal
+testast: p1 rpal
 	chmod +x p1
 	chmod +x rpal
 	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast -noout FILE" -t tests/

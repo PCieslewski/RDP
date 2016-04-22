@@ -138,7 +138,15 @@ void CSEMachine :: expandStructure(ControlStructure* cs){
 
 	vector<ControlUnit*>::iterator it;
 	for (it = cs->units.begin(); it != cs->units.end(); it++){
-		controlStack.push_back(*it);
+		
+		if( (*it)->type == LAMBDA ){
+			LambdaCU* lam = ((LambdaCU*)(*it))->copy();
+			controlStack.push_back( ((LambdaCU*)(*it))->copy() );
+		}
+		else{
+			controlStack.push_back(*it);
+		}
+		
 	}
 	
 }
@@ -592,10 +600,24 @@ void CSEMachine :: exeGammaOnTuple(){
 	TupleCU* tup = (TupleCU*)exeStack.front();
 	exeStack.pop_front();
 	
-	IntegerCU* num = (IntegerCU*)exeStack.front();
+	IntegerCU* number = (IntegerCU*)exeStack.front();
 	exeStack.pop_front();
 	
-	exeStack.push_front(tup->list.at(num->num-1)); //-1 for 1 index in rpal???
+	if(number->type != INTEGER){
+		cout << "Bad type for tuple retrieval." << endl;
+		exit(EXIT_FAILURE);
+	}
+	
+	exeStack.push_front(tup->list.at((number->num)-1));//-1 for 1 index in rpal???
+	
+	
+	//cout << tup->list.at((number->num)-1)->toString() << endl;
+	
+	/*cout << "---" << endl;
+	cout << tup->toString() << endl;
+	cout << ((number->num)-1) << endl;
+	cout << CUHelper :: getString(exeStack.front()) << endl;
+	cout << "---" << endl;*/
 	
 }
 

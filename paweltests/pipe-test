@@ -1,0 +1,7 @@
+let PIPE x f = f x
+in
+let
+T x y = Conc x y
+in
+Print('g' @PIPE (T (('a','b') 1)) @PIPE ((T (('a','b') 2))))
+
