@@ -19,9 +19,16 @@ using namespace std;
 /*
 This is the main function for the entire project. Simply,
 it gets the command line arguments, such as -ast. Then it
-creates a parser object on the path passed in and calls 
-getAst on it to generate the AST. Then it prints the AST
-if the -ast flag was set.
+creates the required objects and executes the program.
+
+The following are all accepted flags:
+-l     - Shows the file that was input
+-ast   - Shows the AST generated
+-st    - Shows the standardized tree
+-cs    - Shows the control structures after flattening
+-ex    - Shows the execution of the CSE machine
+-noout - Does not show the final output.
+
 */
 
 void replaceAll(std::string& str, const std::string& from, const std::string& to);
@@ -29,7 +36,7 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 int main (int argc, char* argv[]){
 	
 	string path = string(argv[argc-1]);
-	bool print = false;
+	bool printAst = false;
 	bool printfile = false;
 	bool printSt = false;
 	bool printCs = false;
@@ -44,7 +51,7 @@ int main (int argc, char* argv[]){
 	for(int i = 1; i < argc-1; i++){
 		string arg = argv[i];
 		if(!arg.compare("-ast")){
-			print = true;	
+			printAst = true;	
 		}
 		else if(!arg.compare("-l")){
 			printfile = true;	
@@ -78,7 +85,7 @@ int main (int argc, char* argv[]){
 	
 	TreeNode* ast = p.getAst(path.c_str());
 	
-	if(print){
+	if(printAst){
 		cout << ast->toString() << endl;
 	}
 	
@@ -89,31 +96,17 @@ int main (int argc, char* argv[]){
 	}
 	
 	Flattener flat;
-	
 	StructureList* sl = flat.genStructureList(st);
 	
 	if(printCs){
 		cout << sl->toString() << endl;
 	}
 	
+	CSEMachine* cse = new CSEMachine(sl, printExe);
+	cse->run();
+	
 	if(printOutput){
-		CSEMachine* cse = new CSEMachine(sl, printExe);
-		cse->run();
-		
-		string out = cse->output.str();
-		replaceAll(out, "\\n", "\n");
-		replaceAll(out, "\\t", "\t");
-		cout << out << endl;
+		cout << cse->output.str() << endl;
 	}
   
-}
-
-void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-	if(from.empty())
-		return;
-	size_t start_pos = 0;
-	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-		str.replace(start_pos, from.length(), to);
-		start_pos += to.length();
-	}
 }

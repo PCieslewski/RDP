@@ -139,13 +139,15 @@ void CSEMachine :: expandStructure(ControlStructure* cs){
 	vector<ControlUnit*>::iterator it;
 	for (it = cs->units.begin(); it != cs->units.end(); it++){
 		
-		if( (*it)->type == LAMBDA ){
+		/*if( (*it)->type == LAMBDA ){
 			LambdaCU* lam = ((LambdaCU*)(*it))->copy();
 			controlStack.push_back( ((LambdaCU*)(*it))->copy() );
 		}
 		else{
 			controlStack.push_back(*it);
-		}
+		}*/
+		
+		controlStack.push_back(CUHelper :: copy(*it));
 		
 	}
 	
@@ -305,7 +307,11 @@ void CSEMachine :: callPrint(){
 	
 	exeStack.push_front(new DummyCU());
 	
-	output << CUHelper :: getString(cu);
+	string str = CUHelper :: getString(cu);
+	replaceAll(str, "\\n", "\n");
+	replaceAll(str, "\\t", "\t");
+	
+	output << str;
 	
 }
 
@@ -757,6 +763,16 @@ void CSEMachine :: move(){
 	exeStack.push_front(controlStack.back());
 	controlStack.pop_back();
 	
+}
+
+void CSEMachine :: replaceAll(std::string& str, const std::string& from, const std::string& to) {
+	if(from.empty())
+		return;
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length();
+	}
 }
 	
 	

@@ -1,5 +1,5 @@
-p1: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o
-	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o -o p1
+p2: main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o
+	g++ main.o Lexer.o Token.o TreeNode.o Parser.o Standardizer.o ControlUnit.o Flattener.o Enviornment.o CSEMachine.o -o p2
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -32,27 +32,27 @@ CSEMachine.o: CSEMachine.cpp CSEMachine.h
 	g++ -c CSEMachine.cpp
 
 clean:
-	rm -f *.o p1 test LOL.txt
+	rm -f *.o p2 test
 	rm -f -r diffresult
 	
 cl:
-	rm -f *.o p1 test
+	rm -f *.o p2 test
 	rm -f -r diffresult
 	
-testast: p1 rpal
-	chmod +x p1
+testast: p2 rpal
+	chmod +x p2
 	chmod +x rpal
-	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p1 -ast -noout FILE" -t tests/
+	perl difftest.pl -1 "./rpal -ast -noout FILE" -2 "./p2 -ast -noout FILE" -t tests/
 	
-testst: p1 rpal
-	chmod +x p1
+testst: p2 rpal
+	chmod +x p2
 	chmod +x rpal
-	perl difftest.pl -1 "./rpal -st -noout FILE" -2 "./p1 -st -noout FILE" -t tests/
+	perl difftest.pl -1 "./rpal -st -noout FILE" -2 "./p2 -st -noout FILE" -t tests/
 	
-testfull: p1 rpal
-	chmod +x p1
+testfull: p2 rpal
+	chmod +x p2
 	chmod +x rpal
-	perl difftest.pl -1 "./rpal FILE" -2 "./p1 FILE" -t tests/
+	perl difftest.pl -1 "./rpal FILE" -2 "./p2 FILE" -t tests/
 	
 mainTest: 
 	g++ -c mainTest.cpp

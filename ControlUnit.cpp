@@ -31,3 +31,13 @@ string TupleCU :: toString(){
 		return temp.str();
 	}
 }
+
+TupleCU* TupleCU :: copy(){
+			
+	TupleCU* tup = new TupleCU();
+	for(vector<ControlUnit*>::iterator it = this->list.begin(); it != this->list.end(); it++) {
+		tup->insert(CUHelper :: copy(*it));
+	}
+	return tup;
+
+}

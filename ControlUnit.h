@@ -94,6 +94,7 @@ class FunctionCU: public ControlUnit {
 		FunctionCU* copy(){
 			FunctionCU* fcu = new FunctionCU(this->name);
 			fcu->dataStr = this->dataStr;
+			return fcu;
 		}
 	
 };
@@ -327,6 +328,10 @@ class StringCU: public ControlUnit {
 			return !(this->value.compare(value));
 		}
 	
+		StringCU* copy(){
+			return new StringCU(this->value);	
+		}
+	
 };
 
 class BooleanCU: public ControlUnit {
@@ -345,6 +350,10 @@ class BooleanCU: public ControlUnit {
 			else{
 				return "false";
 			}
+		}
+	
+		BooleanCU* copy(){
+			return new BooleanCU(this->value);	
 		}
 	
 };
@@ -368,6 +377,8 @@ class TupleCU: public ControlUnit {
 			list.push_back(cu);	
 		}
 	
+		TupleCU* copy();
+	
 };
 
 class DummyCU: public ControlUnit {
@@ -380,6 +391,10 @@ class DummyCU: public ControlUnit {
 			return "Dummy";
 		}
 	
+		DummyCU* copy(){
+			return new DummyCU();	
+		}
+	
 };
 
 class EtaCU: public ControlUnit {
@@ -389,11 +404,17 @@ class EtaCU: public ControlUnit {
 		LambdaCU* recLambda;
 	
 		EtaCU(LambdaCU* recLambda): ControlUnit(ETA){
-			this->recLambda = recLambda;
+			//this->recLambda = recLambda;
+			//EXP
+			this->recLambda = recLambda->copy();
 		}
 	
 		string toString(){
 			return "Eta";
+		}
+	
+		EtaCU* copy(){
+			return new EtaCU(this->recLambda);	
 		}
 	
 };
@@ -467,7 +488,50 @@ class CUHelper {
 				case(ETA):
 					return ((EtaCU*)cu)->toString();
 				default:
-					return "Unknown Type.";
+					cout << "Unknown Type for ToString in CUHelper." << endl;
+					exit(EXIT_FAILURE);
+			}
+		}
+	
+		static ControlUnit* copy(ControlUnit* cu){
+			switch(cu->type){
+				case(IDENTIFIER):
+					return ((IdCU*)cu)->copy();
+				case(ENVIORNMENT):
+					return ((EnvCU*)cu)->copy();
+				case(LAMBDA):
+					return ((LambdaCU*)cu)->copy();
+				case(GAMMA):
+					return ((GammaCU*)cu)->copy();
+				case(BINOP):
+					return ((BinopCU*)cu)->copy();
+				case(UNOP):
+					return ((UnopCU*)cu)->copy();
+				case(BETA):
+					return ((BetaCU*)cu)->copy();
+				case(STRUCTURE):
+					return cu; //No need to copy structures. Immutable after flattening.
+				case(TAU):
+					return ((TauCU*)cu)->copy();
+				case(Y):
+					return ((YCU*)cu)->copy();
+				case(INTEGER):
+					return ((IntegerCU*)cu)->copy();
+				case(STRING):
+					return ((StringCU*)cu)->copy();
+				case(BOOLEAN):
+					return ((BooleanCU*)cu)->copy();
+				case(TUPLE):
+					return ((TupleCU*)cu)->copy();
+				case(DUMMY):
+					return ((DummyCU*)cu)->copy();
+				case(FUNCTION):
+					return ((FunctionCU*)cu)->copy();
+				case(ETA):
+					return ((EtaCU*)cu)->copy();
+				default:
+					cout << "Unknown Type for Copy in CUHelper." << endl;
+					exit(EXIT_FAILURE);
 			}
 		}
 	
@@ -576,8 +640,13 @@ class CUHelper {
 	
 		static ControlUnit* aug(ControlUnit* cu1, ControlUnit* cu2){
 			if( (cu1->type == TUPLE) ){
-				((TupleCU*)cu1)->insert(cu2);
-				return cu1;
+				
+				TupleCU* tup = ((TupleCU*)cu1)->copy();
+				tup->insert( CUHelper :: copy(cu2) );
+				return tup;
+				
+				//((TupleCU*)cu1)->insert(cu2);
+				//return cu1;
 			}
 			else{
 				cout << "Augment to non tuple." << endl;
