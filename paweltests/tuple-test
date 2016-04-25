@@ -1,0 +1,7 @@
+let a = (1,2,3)
+in
+let b = a
+in
+Print( a,b aug 5,b )
+
+

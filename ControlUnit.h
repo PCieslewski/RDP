@@ -641,12 +641,14 @@ class CUHelper {
 		static ControlUnit* aug(ControlUnit* cu1, ControlUnit* cu2){
 			if( (cu1->type == TUPLE) ){
 				
+				/*The way i think it should be:*/
 				TupleCU* tup = ((TupleCU*)cu1)->copy();
 				tup->insert( CUHelper :: copy(cu2) );
 				return tup;
 				
-				//((TupleCU*)cu1)->insert(cu2);
-				//return cu1;
+				/*The way its implemented?*/
+				/*((TupleCU*)cu1)->insert(cu2);
+				return cu1;*/
 			}
 			else{
 				cout << "Augment to non tuple." << endl;

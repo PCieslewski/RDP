@@ -17,7 +17,10 @@ ControlUnit* Enviornment :: getBinding(string str){
 	vector<BoundPair>::iterator it;
 	for(it = bindings.begin(); it != bindings.end(); it++) {
 		if((*it).strIs(str)){
-			return (*it).cu;
+			//exp
+			return CUHelper :: copy((*it).cu);
+			
+			//return (*it).cu;
 		}
 	}
 	

@@ -31,8 +31,6 @@ The following are all accepted flags:
 
 */
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to);
-
 int main (int argc, char* argv[]){
 	
 	string path = string(argv[argc-1]);

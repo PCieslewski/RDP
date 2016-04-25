@@ -53,10 +53,3 @@ testfull: p2 rpal
 	chmod +x p2
 	chmod +x rpal
 	perl difftest.pl -1 "./rpal FILE" -2 "./p2 FILE" -t tests/
-	
-mainTest: 
-	g++ -c mainTest.cpp
-	g++ -c Flattener.cpp
-	g++ -c ControlUnit.cpp
-	g++ -c TreeNode.cpp
-	g++ mainTest.o Flattener.o ControlUnit.o TreeNode.o -o test
